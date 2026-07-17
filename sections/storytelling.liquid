@@ -1,0 +1,293 @@
+{% style %}
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600;700;900&display=swap');
+
+  .storytelling-{{ section.id }} {
+    /* Variables de marque */
+    --color-primary: {{ section.settings.color_primary | default: '#4A5D3A' }};
+    --color-background: {{ section.settings.color_background | default: '#F5F0E6' }};
+    --color-surface: {{ section.settings.color_surface | default: '#FFFFFF' }};
+    --color-text: {{ section.settings.color_text | default: '#2C2C2C' }};
+    --color-gold: {{ section.settings.color_gold | default: '#C5A55A' }};
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Inter', sans-serif;
+
+    background-color: var(--color-background);
+    padding: clamp(5rem, 10vw, 10rem) 1.5rem;
+    overflow: hidden;
+  }
+
+  .storytelling__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(5rem, 12vw, 10rem);
+  }
+
+  .storytelling__block {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(3rem, 6vw, 6rem);
+    align-items: center;
+    /* État initial pour l'animation Intersection Observer */
+    opacity: 0;
+    transform: translateY(40px) scale(0.98);
+    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .storytelling__block.is-visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  @media (min-width: 768px) {
+    .storytelling__block {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    /* Alternance logique : Image à droite, Texte à gauche */
+    .storytelling__block--image-right .storytelling__image-wrapper {
+      order: 2;
+    }
+    .storytelling__block--image-right .storytelling__content {
+      order: 1;
+    }
+
+    /* Alternance logique : Image à gauche, Texte à droite */
+    .storytelling__block--image-left .storytelling__image-wrapper {
+      order: 1;
+    }
+    .storytelling__block--image-left .storytelling__content {
+      order: 2;
+    }
+  }
+
+  .storytelling__image-wrapper {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+  }
+
+  .storytelling__image-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, transparent 60%, rgba(0,0,0,0.1));
+    pointer-events: none;
+  }
+
+  .storytelling__image {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    aspect-ratio: 4/5;
+    transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .storytelling__image-wrapper:hover .storytelling__image {
+    transform: scale(1.04);
+  }
+
+  .storytelling__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .storytelling__subtitle {
+    font-family: var(--font-body);
+    font-size: clamp(0.75rem, 1vw + 0.5rem, 0.875rem);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--color-primary);
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+  }
+
+  .storytelling__title {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 3.5vw + 1rem, 4rem);
+    line-height: 1.1;
+    color: var(--color-text);
+    margin: 0 0 2rem 0;
+    font-weight: 700;
+  }
+
+  .storytelling__text {
+    font-family: var(--font-body);
+    font-size: clamp(1rem, 1vw + 0.5rem, 1.125rem);
+    line-height: 1.75;
+    color: var(--color-text);
+    opacity: 0.85;
+  }
+
+  .storytelling__text p {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+  }
+  
+  .storytelling__text p:last-child {
+    margin-bottom: 0;
+  }
+{% endstyle %}
+
+<div class="storytelling-{{ section.id }}" id="Storytelling-{{ section.id }}">
+  <div class="storytelling__container">
+    {%- for block in section.blocks -%}
+      {%- liquid
+        assign mod = forloop.index0 | modulo: 2
+        assign block_layout = 'image-left'
+        if mod == 1
+          assign block_layout = 'image-right'
+        endif
+      -%}
+      
+      <div class="storytelling__block storytelling__block--{{ block_layout }}" {{ block.shopify_attributes }} data-story-block>
+        <!-- Bloc Image -->
+        <div class="storytelling__image-wrapper">
+          {%- if block.settings.image != blank -%}
+            {{ block.settings.image | image_url: width: 1200 | image_tag: 
+              class: 'storytelling__image', 
+              loading: 'lazy', 
+              alt: block.settings.image.alt | default: block.settings.title,
+              widths: '400, 600, 800, 1200'
+            }}
+          {%- else -%}
+            {{ 'collection-1' | placeholder_svg_tag: 'storytelling__image' }}
+          {%- endif -%}
+        </div>
+        
+        <!-- Bloc Texte -->
+        <div class="storytelling__content">
+          {%- if block.settings.subtitle != blank -%}
+            <div class="storytelling__subtitle">{{ block.settings.subtitle }}</div>
+          {%- endif -%}
+          
+          {%- if block.settings.title != blank -%}
+            <h2 class="storytelling__title">{{ block.settings.title | escape }}</h2>
+          {%- endif -%}
+          
+          {%- if block.settings.text != blank -%}
+            <div class="storytelling__text">{{ block.settings.text }}</div>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Vanilla JS + Intersection Observer pour l'animation au scroll
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px 0px -10% 0px', // Déclenche un peu avant que le bloc ne touche le bas
+      threshold: 0.15
+    };
+
+    const storyObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // Ajoute la classe qui déclenche la transition CSS
+          entry.target.classList.add('is-visible');
+          // Arrête d'observer une fois l'animation déclenchée (one-off)
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    // Sélectionne tous les blocs de la section actuelle
+    const blocks = document.querySelectorAll('#Storytelling-{{ section.id }} [data-story-block]');
+    blocks.forEach(block => storyObserver.observe(block));
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Storytelling Premium",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Couleurs (CSS Custom Properties)"
+    },
+    {
+      "type": "color",
+      "id": "color_primary",
+      "label": "Primaire (Vert olive)",
+      "default": "#4A5D3A"
+    },
+    {
+      "type": "color",
+      "id": "color_background",
+      "label": "Fond (Crème)",
+      "default": "#F5F0E6"
+    },
+    {
+      "type": "color",
+      "id": "color_text",
+      "label": "Texte",
+      "default": "#2C2C2C"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "story_block",
+      "name": "Bloc d'histoire",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Sous-titre",
+          "default": "Notre savoir-faire"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titre",
+          "default": "Une passion transmise"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Texte",
+          "default": "<p>Partagez l'histoire de votre marque, de vos produits ou de votre savoir-faire artisanal. Un texte inspirant connecte vos clients à vos valeurs profondes.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Storytelling Premium",
+      "category": "Texte",
+      "blocks": [
+        {
+          "type": "story_block",
+          "settings": {
+            "subtitle": "Héritage",
+            "title": "Depuis 3 générations"
+          }
+        },
+        {
+          "type": "story_block",
+          "settings": {
+            "subtitle": "Processus",
+            "title": "Torréfaction artisanale"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
