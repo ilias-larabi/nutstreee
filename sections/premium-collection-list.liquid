@@ -1,0 +1,342 @@
+{% style %}
+  .premium-categories-{{ section.id }} {
+    --color-primary: {{ section.settings.color_primary | default: '#4A5D3A' }};
+    --color-secondary: {{ section.settings.color_secondary | default: '#B5651D' }};
+    --color-background: {{ section.settings.color_background | default: '#F5F0E6' }};
+    --color-text: {{ section.settings.color_text | default: '#2C2C2C' }};
+    --color-surface: {{ section.settings.color_surface | default: '#FFFFFF' }};
+    
+    background-color: var(--color-background);
+    padding: 6rem 1.5rem;
+    color: var(--color-text);
+  }
+
+  @media (min-width: 768px) {
+    .premium-categories-{{ section.id }} {
+      padding: 8rem 5%;
+    }
+  }
+
+  .premium-categories__header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .premium-categories__title {
+    font-family: var(--font-heading, 'Playfair Display', serif);
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    color: var(--color-primary);
+    margin: 0;
+    font-weight: 700;
+  }
+
+  .premium-categories__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  @media (min-width: 768px) {
+    .premium-categories__grid {
+      grid-template-columns: repeat({{ section.settings.columns_desktop | default: 3 }}, 1fr);
+      gap: 2.5rem;
+    }
+  }
+
+  .premium-category-card {
+    display: block;
+    text-decoration: none;
+    position: relative;
+    border-radius: 12px;
+    background-color: var(--color-surface);
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    transition: box-shadow 0.4s ease, transform 0.4s ease;
+    height: 100%;
+  }
+
+  .premium-category-card:hover {
+    box-shadow: 0 15px 35px rgba(74, 93, 58, 0.15);
+    transform: translateY(-5px);
+  }
+
+  .premium-category-card__image-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .premium-category-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .premium-category-card:hover .premium-category-card__image {
+    transform: scale(1.08);
+  }
+
+  /* Overlay gradient for text readability */
+  .premium-category-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .premium-category-card__content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 1.5rem 1rem;
+    z-index: 2;
+    text-align: center;
+  }
+
+  @media (min-width: 768px) {
+    .premium-category-card__content {
+      padding: 2rem 1.5rem;
+    }
+  }
+
+  .premium-category-card__title {
+    font-family: var(--font-heading, 'Playfair Display', serif);
+    font-size: clamp(1.2rem, 2vw, 1.75rem);
+    color: #FFFFFF;
+    margin: 0;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  }
+
+  .premium-categories__footer {
+    text-align: center;
+    margin-top: 4rem;
+  }
+
+  .premium-categories__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 1rem 3rem;
+    background-color: transparent;
+    color: var(--color-primary);
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 50px;
+    transition: all 0.4s ease;
+    border: 2px solid var(--color-primary);
+    cursor: pointer;
+  }
+
+  .premium-categories__btn:hover {
+    background-color: var(--color-primary);
+    color: var(--color-surface);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(74, 93, 58, 0.2);
+  }
+{% endstyle %}
+
+<div class="premium-categories-{{ section.id }}">
+  <div class="page-width">
+    {%- if section.settings.title != blank -%}
+      <div class="premium-categories__header">
+        <h2 class="premium-categories__title">{{ section.settings.title | escape }}</h2>
+      </div>
+    {%- endif -%}
+
+    <ul class="premium-categories__grid">
+      {%- for block in section.blocks -%}
+        <li {{ block.shopify_attributes }}>
+          {%- assign collection = collections[block.settings.collection] -%}
+          {%- assign image = block.settings.image | default: collection.image | default: collection.products.first.featured_image -%}
+          {%- assign title = block.settings.title | default: collection.title -%}
+          {%- assign link = collection.url | default: '/collections' -%}
+          
+          <a href="{{ link }}" class="premium-category-card">
+            <div class="premium-category-card__image-wrapper">
+              {%- if image != blank -%}
+                <img 
+                  src="{{ image | image_url: width: 800 }}" 
+                  alt="{{ title | escape }}"
+                  class="premium-category-card__image"
+                  loading="lazy"
+                  width="800"
+                  height="auto"
+                >
+              {%- else -%}
+                {{ 'collection-1' | placeholder_svg_tag: 'premium-category-card__image' }}
+              {%- endif -%}
+            </div>
+            <div class="premium-category-card__content">
+              <h3 class="premium-category-card__title">{{ title | default: 'Catégorie' }}</h3>
+            </div>
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+
+    {%- if section.settings.show_view_all -%}
+      <div class="premium-categories__footer">
+        <a href="/collections" class="premium-categories__btn">
+          {{ section.settings.view_all_text | default: 'Voir toutes les catégories' }}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Catégories Premium",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titre de la section",
+      "default": "Découvrez nos univers"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 3,
+      "label": "Colonnes sur ordinateur"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "default": true,
+      "label": "Afficher le bouton 'Tout voir'"
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "Texte du bouton",
+      "default": "Voir toutes les catégories"
+    },
+    {
+      "type": "header",
+      "content": "Couleurs"
+    },
+    {
+      "type": "color",
+      "id": "color_primary",
+      "label": "Primaire",
+      "default": "#4A5D3A"
+    },
+    {
+      "type": "color",
+      "id": "color_secondary",
+      "label": "Secondaire",
+      "default": "#B5651D"
+    },
+    {
+      "type": "color",
+      "id": "color_background",
+      "label": "Fond",
+      "default": "#F5F0E6"
+    },
+    {
+      "type": "color",
+      "id": "color_text",
+      "label": "Texte",
+      "default": "#2C2C2C"
+    },
+    {
+      "type": "color",
+      "id": "color_surface",
+      "label": "Surface de carte",
+      "default": "#FFFFFF"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Catégorie",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection Shopify"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image (Optionnel)",
+          "info": "Remplace l'image par défaut de la collection."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titre (Optionnel)",
+          "info": "Remplace le nom par défaut de la collection."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Catégories Premium",
+      "blocks": [
+        {
+          "type": "collection",
+          "settings": {
+            "title": "Fruits secs"
+          }
+        },
+        {
+          "type": "collection",
+          "settings": {
+            "title": "Miel"
+          }
+        },
+        {
+          "type": "collection",
+          "settings": {
+            "title": "Chocolat"
+          }
+        },
+        {
+          "type": "collection",
+          "settings": {
+            "title": "Fruits confits"
+          }
+        },
+        {
+          "type": "collection",
+          "settings": {
+            "title": "Épices"
+          }
+        },
+        {
+          "type": "collection",
+          "settings": {
+            "title": "Cadeaux / Coffrets"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

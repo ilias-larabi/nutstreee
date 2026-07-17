@@ -18,34 +18,64 @@
         "color_gold": "#C5A55A"
       }
     },
-    "storytelling": {
-      "type": "storytelling",
+    "premium_categories": {
+      "type": "premium-collection-list",
       "blocks": {
         "block_1": {
-          "type": "story_block",
+          "type": "collection",
           "settings": {
-            "subtitle": "Notre savoir-faire",
-            "title": "Une passion transmise",
-            "text": "<p>Partagez l'histoire de votre marque, de vos produits ou de votre savoir-faire artisanal.<\/p>"
+            "title": "Fruits secs"
           }
         },
         "block_2": {
-          "type": "story_block",
+          "type": "collection",
           "settings": {
-            "subtitle": "Héritage",
-            "title": "Depuis 3 générations",
-            "text": "<p>Découvrez la qualité et l'engagement qui nous animent chaque jour pour vous offrir le meilleur de la nature.<\/p>"
+            "title": "Miel"
+          }
+        },
+        "block_3": {
+          "type": "collection",
+          "settings": {
+            "title": "Chocolat"
+          }
+        },
+        "block_4": {
+          "type": "collection",
+          "settings": {
+            "title": "Fruits confits"
+          }
+        },
+        "block_5": {
+          "type": "collection",
+          "settings": {
+            "title": "Épices"
+          }
+        },
+        "block_6": {
+          "type": "collection",
+          "settings": {
+            "title": "Cadeaux / Coffrets"
           }
         }
       },
       "block_order": [
         "block_1",
-        "block_2"
+        "block_2",
+        "block_3",
+        "block_4",
+        "block_5",
+        "block_6"
       ],
       "settings": {
+        "title": "Découvrez nos univers",
+        "columns_desktop": 3,
+        "show_view_all": true,
+        "view_all_text": "Voir toutes les catégories",
         "color_primary": "#4A5D3A",
+        "color_secondary": "#B5651D",
         "color_background": "#F5F0E6",
-        "color_text": "#2C2C2C"
+        "color_text": "#2C2C2C",
+        "color_surface": "#FFFFFF"
       }
     },
     "featured_collection": {
@@ -79,7 +109,7 @@
   },
   "order": [
     "hero_3d",
-    "storytelling",
+    "premium_categories",
     "featured_collection"
   ]
 }
