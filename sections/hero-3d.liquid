@@ -278,7 +278,7 @@
         widths: '300, 500, 750, 1000, 1500'
       }}
     {%- else -%}
-      {{ 'product-1' | placeholder_svg_tag: 'hero-3d__image' }}
+      <img src="{{ 'product-sachet.png' | asset_url }}" class="hero-3d__image" alt="Sachet Nuts Tree" loading="eager" width="1500" height="auto">
     {%- endif -%}
 
     {%- if section.settings.image_link != blank -%}
