@@ -39,7 +39,8 @@
               class="announcement-bar__link link link--text focus-inset animate-arrow"
             >
           {%- endif -%}
-          <p class="announcement-bar__message h5">
+          <p class="announcement-bar__message h5" style="display: flex; align-items: center; justify-content: center;">
+            <svg style="width: 18px; height: 18px; margin-right: 8px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 17a2 2 0 1 0 4 0a2 2 0 0 0-4 0"/><path d="M15 17a2 2 0 1 0 4 0a2 2 0 0 0-4 0"/><path d="M5 15H3v-9a2 2 0 0 1 2-2h10l4 4v8h-2"/><path d="M13 15H9"/><path d="M15 6h4l3 4v5h-3"/></svg>
             <span>{{ section.blocks.first.settings.text | escape }}</span>
             {%- if section.blocks.first.settings.link != blank -%}
               {{- 'icon-arrow.svg' | inline_asset_content -}}
@@ -99,7 +100,8 @@
                         class="announcement-bar__link link link--text focus-inset animate-arrow"
                       >
                     {%- endif -%}
-                    <p class="announcement-bar__message h5">
+                    <p class="announcement-bar__message h5" style="display: flex; align-items: center; justify-content: center;">
+                      <svg style="width: 18px; height: 18px; margin-right: 8px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 17a2 2 0 1 0 4 0a2 2 0 0 0-4 0"/><path d="M15 17a2 2 0 1 0 4 0a2 2 0 0 0-4 0"/><path d="M5 15H3v-9a2 2 0 0 1 2-2h10l4 4v8h-2"/><path d="M13 15H9"/><path d="M15 6h4l3 4v5h-3"/></svg>
                       <span>{{ block.settings.text | escape }}</span>
                       {%- if block.settings.link != blank -%}
                         {{- 'icon-arrow.svg' | inline_asset_content -}}

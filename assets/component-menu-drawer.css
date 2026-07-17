@@ -241,3 +241,8 @@ details[open].menu-opening > .menu-drawer__submenu {
     transition: none !important;
   }
 }
+
+/* Nutstree Premium Mobile Menu Fix */
+.menu-drawer { background-color: #F5F0E6 !important; color: #2C2C2C !important; }
+.menu-drawer__menu-item, .menu-drawer__close-button { color: #2C2C2C !important; font-weight: 500; }
+.menu-drawer__menu-item:hover { color: #4A5D3A !important; }
