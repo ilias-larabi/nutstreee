@@ -1,0 +1,56 @@
+{% comment %}
+  NUTSTREE — Sticky Add to Cart Snippet
+  Injecté depuis theme.liquid uniquement sur les pages produit.
+  Conforme OS 2.0 : pas de HTML en dur dans les layouts.
+{% endcomment %}
+
+{{- 'sticky-add-to-cart.css' | asset_url | stylesheet_tag -}}
+
+<div class="nt-sticky-atc" aria-live="polite" aria-label="{{ 'products.product.add_to_cart' | t }}" hidden>
+  <div class="nt-sticky-atc__inner">
+
+    <div class="nt-sticky-atc__info">
+      <span class="nt-sticky-atc__title">{{ product.title | escape }}</span>
+      {%- unless product.has_only_default_variant -%}
+        <span class="nt-sticky-atc__variant">
+          {{- product.selected_or_first_available_variant.title | escape -}}
+        </span>
+      {%- endunless -%}
+    </div>
+
+    <span class="nt-sticky-atc__price">
+      {{- product.selected_or_first_available_variant.price | money -}}
+    </span>
+
+    <button
+      class="nt-sticky-atc__btn"
+      type="button"
+      aria-label="{{ 'products.product.add_to_cart' | t }}"
+      id="sticky-atc-btn"
+      {% unless product.selected_or_first_available_variant.available %}
+        disabled
+        data-sold-out
+      {% endunless %}
+    >
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+      </svg>
+      <span class="nt-sticky-atc__btn-text">
+        {%- if product.selected_or_first_available_variant.available -%}
+          {{ 'products.product.add_to_cart' | t }}
+        {%- else -%}
+          {{ 'products.product.sold_out' | t }}
+        {%- endif -%}
+      </span>
+    </button>
+
+  </div>
+</div>
+
+<script>
+  // Reveal the bar (hidden by default to avoid flash before JS takes control)
+  document.querySelector('.nt-sticky-atc')?.removeAttribute('hidden');
+</script>
+
+<script src="{{ 'sticky-add-to-cart.js' | asset_url }}" defer></script>

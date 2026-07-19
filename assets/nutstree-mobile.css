@@ -1,0 +1,118 @@
+/* ============================================================
+   NUTSTREE — Mobile Perfect Enhancements
+   Phase 1A: Touch Targets (44-48px minimum — Apple HIG / Material)
+   ============================================================ */
+
+/* Header icons */
+.header__icon,
+.header__icon--summary {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Menu drawer hamburger — enlarged tap zone */
+.header__icon--menu {
+  padding: 0.65rem;
+}
+
+/* Product form submit button */
+.product-form__submit,
+.button--primary,
+.button--secondary {
+  min-height: 48px;
+}
+
+/* Variant pill buttons (weight options: 35/70/140 MAD etc.)
+   Using correct Dawn selector: input[type='radio'] + label */
+.product-form__input--pill input[type='radio'] + label {
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Gap between pill options — prevents mis-taps on mobile */
+.product-form__input--pill {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  row-gap: 0.6rem;
+}
+
+.product-form__input--pill input[type='radio'] + label {
+  margin: 0; /* override Dawn's default margin, gap handles spacing */
+}
+
+/* Swatch spacing */
+.product-form__input--swatch {
+  gap: 0.75rem;
+  row-gap: 0.75rem;
+}
+
+/* Swatch touch targets */
+.swatch-input__btn {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Quantity input touch target */
+.quantity__button {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* Select dropdowns (variant dropdown picker) */
+.select__select {
+  min-height: 44px;
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
+}
+
+/* ============================================================
+   Phase 1B: Bilingual (FR + Arabe) — bidi and wrapping fixes
+   ============================================================ */
+
+/* Card product title — 2-line clamp with clean ellipsis */
+.card__heading,
+.card__heading a,
+.card__heading .full-unstyled-link {
+  overflow-wrap: break-word;
+  word-break: break-word;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  overflow: hidden;
+}
+
+/* Prevent Arabic RTL from bleeding into LTR flex layout */
+.card__information,
+.card-information,
+.card__heading {
+  unicode-bidi: isolate;
+}
+
+/* Fix for text not wrapping inside flex children */
+.card__content,
+.card__information {
+  min-width: 0;
+}
+
+/* Product title on product page — handles long FR+AR titles */
+.product__title,
+.product-info__title {
+  overflow-wrap: break-word;
+  word-break: break-word;
+  unicode-bidi: isolate;
+}
+
+/* Price range display — prevent overflow on mobile (e.g. "80.00 - 110.00 MAD") */
+.price,
+.price__container,
+.price-item {
+  overflow-wrap: break-word;
+  min-width: 0;
+}
