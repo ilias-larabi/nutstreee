@@ -1,0 +1,386 @@
+{% comment %}
+  NUTSTREE — Storytelling "Notre Histoire"
+  Layout 2 colonnes desktop, image pleine largeur mobile
+{% endcomment %}
+
+{%- style -%}
+  .nt-story-{{ section.id }} {
+    --c-bg:      {{ section.settings.color_background | default: '#3B4F2A' }};
+    --c-text:    {{ section.settings.color_text       | default: '#F5F0E6' }};
+    --c-accent:  {{ section.settings.color_accent     | default: '#C5A55A' }};
+    --c-muted:   rgba(245,240,230,.65);
+    --ff-head: 'Playfair Display', serif;
+    --ff-body: 'Inter', sans-serif;
+
+    background-color: var(--c-bg);
+    color: var(--c-text);
+    overflow: hidden;
+  }
+
+  .nt-story__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 750px) {
+    .nt-story__grid {
+      grid-template-columns: 1fr 1fr;
+      min-height: 580px;
+    }
+  }
+
+  @media (min-width: 990px) {
+    .nt-story__grid {
+      grid-template-columns: 52% 48%;
+      min-height: 640px;
+    }
+  }
+
+  /* ── Image ── */
+  .nt-story__media {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4/3;
+  }
+
+  @media (min-width: 750px) {
+    .nt-story__media {
+      aspect-ratio: auto;
+    }
+  }
+
+  .nt-story__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 8s ease;
+  }
+
+  .nt-story__media:hover .nt-story__img {
+    transform: scale(1.04);
+  }
+
+  .nt-story__media-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, rgba(59,79,42,.35), transparent);
+    pointer-events: none;
+  }
+
+  @media (max-width: 749px) {
+    .nt-story__media-overlay {
+      background: linear-gradient(to bottom, transparent, rgba(59,79,42,.5));
+    }
+  }
+
+  /* ── Year badge on image ── */
+  .nt-story__year-badge {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 1.5rem;
+    background: var(--c-accent);
+    color: #1E1E1E;
+    font-family: var(--ff-head);
+    font-size: 1.1rem;
+    font-weight: 700;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    line-height: 1;
+  }
+
+  /* ── Content ── */
+  .nt-story__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3rem 1.5rem;
+  }
+
+  @media (min-width: 750px) {
+    .nt-story__content {
+      padding: 4rem 3.5rem;
+    }
+  }
+
+  @media (min-width: 990px) {
+    .nt-story__content {
+      padding: 5rem 5rem 5rem 4rem;
+    }
+  }
+
+  .nt-story__eyebrow {
+    font-family: var(--ff-body);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--c-accent);
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .nt-story__title {
+    font-family: var(--ff-head);
+    font-size: clamp(1.75rem, 3.5vw, 3rem);
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--c-text);
+    margin: 0 0 1.5rem 0;
+  }
+
+  .nt-story__text {
+    font-family: var(--ff-body);
+    font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+    line-height: 1.8;
+    color: var(--c-muted);
+    margin: 0 0 2.5rem 0;
+  }
+
+  /* ── Timeline stats ── */
+  .nt-story__stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(245,240,230,.15);
+  }
+
+  .nt-story__stat-number {
+    font-family: var(--ff-head);
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    font-weight: 700;
+    color: var(--c-accent);
+    display: block;
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+
+  .nt-story__stat-label {
+    font-family: var(--ff-body);
+    font-size: 0.78rem;
+    color: var(--c-muted);
+    display: block;
+    line-height: 1.3;
+  }
+
+  /* ── CTA ── */
+  .nt-story__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.85rem 1.75rem;
+    min-height: 48px;
+    background: transparent;
+    color: var(--c-text);
+    font-family: var(--ff-body);
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 100px;
+    border: 2px solid rgba(245,240,230,.35);
+    transition: all 0.3s ease;
+    align-self: flex-start;
+  }
+
+  .nt-story__btn:hover {
+    background: rgba(245,240,230,.1);
+    border-color: rgba(245,240,230,.7);
+  }
+{%- endstyle -%}
+
+<div class="nt-story-{{ section.id }}">
+  <div class="nt-story__grid">
+
+    {%- comment -%} ── IMAGE ── {%- endcomment -%}
+    <div class="nt-story__media">
+      {%- if section.settings.image != blank -%}
+        {{ section.settings.image | image_url: width: 1200 | image_tag:
+            class: 'nt-story__img',
+            loading: 'lazy',
+            alt: section.settings.image.alt | default: "Notre histoire — Nutstree",
+            widths: '400, 600, 800, 1000, 1200',
+            sizes: '(min-width: 750px) 50vw, 100vw'
+        }}
+      {%- else -%}
+        <div style="width:100%;height:100%;background:linear-gradient(135deg,#4A5D3A,#2C3A1E);display:flex;align-items:center;justify-content:center;">
+          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="rgba(245,240,230,.3)" stroke-width="1"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+        </div>
+      {%- endif -%}
+      <div class="nt-story__media-overlay"></div>
+      {%- if section.settings.year_badge != blank -%}
+        <div class="nt-story__year-badge">{{ section.settings.year_badge | escape }}</div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} ── CONTENT ── {%- endcomment -%}
+    <div class="nt-story__content">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="nt-story__eyebrow">{{ section.settings.eyebrow | escape }}</span>
+      {%- endif -%}
+
+      {%- if section.settings.title != blank -%}
+        <h2 class="nt-story__title">{{ section.settings.title | escape }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.text != blank -%}
+        <div class="nt-story__text">{{ section.settings.text }}</div>
+      {%- endif -%}
+
+      <div class="nt-story__stats">
+        {%- if section.settings.stat1_number != blank -%}
+          <div>
+            <span class="nt-story__stat-number">{{ section.settings.stat1_number }}</span>
+            <span class="nt-story__stat-label">{{ section.settings.stat1_label }}</span>
+          </div>
+        {%- endif -%}
+        {%- if section.settings.stat2_number != blank -%}
+          <div>
+            <span class="nt-story__stat-number">{{ section.settings.stat2_number }}</span>
+            <span class="nt-story__stat-label">{{ section.settings.stat2_label }}</span>
+          </div>
+        {%- endif -%}
+        {%- if section.settings.stat3_number != blank -%}
+          <div>
+            <span class="nt-story__stat-number">{{ section.settings.stat3_number }}</span>
+            <span class="nt-story__stat-label">{{ section.settings.stat3_label }}</span>
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.btn_label != blank -%}
+        <a href="{{ section.settings.btn_link | default: '/pages/notre-histoire' }}" class="nt-story__btn">
+          {{ section.settings.btn_label | escape }}
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      {%- endif -%}
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Notre Histoire",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Photo (torréfaction, atelier, nature...)"
+    },
+    {
+      "type": "text",
+      "id": "year_badge",
+      "label": "Badge sur image (ex: Fondé en 2018)",
+      "default": "Fondé en 2018"
+    },
+    {
+      "type": "header",
+      "content": "Texte"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Surtitre",
+      "default": "Notre savoir-faire"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titre",
+      "default": "Une passion transmise, un engagement naturel"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Texte",
+      "default": "<p>Chez Nutstree, chaque fruit sec est soigneusement sélectionné à la source, torréfié artisanalement pour révéler toutes ses saveurs. Notre mission : vous apporter le meilleur de la nature, directement du producteur à votre table.</p><p>Fruits secs, miel, épices et coffrets cadeaux — tout est préparé avec soin et expédié frais partout au Maroc.</p>"
+    },
+    {
+      "type": "text",
+      "id": "btn_label",
+      "label": "Bouton — Texte",
+      "default": "Découvrir notre histoire"
+    },
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "Bouton — Lien"
+    },
+    {
+      "type": "header",
+      "content": "Statistiques clés"
+    },
+    {
+      "type": "text",
+      "id": "stat1_number",
+      "label": "Stat 1 — Chiffre",
+      "default": "200+"
+    },
+    {
+      "type": "text",
+      "id": "stat1_label",
+      "label": "Stat 1 — Label",
+      "default": "Clients fidèles"
+    },
+    {
+      "type": "text",
+      "id": "stat2_number",
+      "label": "Stat 2 — Chiffre",
+      "default": "15+"
+    },
+    {
+      "type": "text",
+      "id": "stat2_label",
+      "label": "Stat 2 — Label",
+      "default": "Variétés de produits"
+    },
+    {
+      "type": "text",
+      "id": "stat3_number",
+      "label": "Stat 3 — Chiffre",
+      "default": "100%"
+    },
+    {
+      "type": "text",
+      "id": "stat3_label",
+      "label": "Stat 3 — Label",
+      "default": "Naturel & artisanal"
+    },
+    {
+      "type": "header",
+      "content": "Couleurs"
+    },
+    {
+      "type": "color",
+      "id": "color_background",
+      "label": "Fond",
+      "default": "#3B4F2A"
+    },
+    {
+      "type": "color",
+      "id": "color_text",
+      "label": "Texte principal",
+      "default": "#F5F0E6"
+    },
+    {
+      "type": "color",
+      "id": "color_accent",
+      "label": "Accent (chiffres, détails)",
+      "default": "#C5A55A"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Notre Histoire"
+    }
+  ]
+}
+{% endschema %}

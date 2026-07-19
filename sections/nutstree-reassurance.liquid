@@ -1,0 +1,231 @@
+{% comment %}
+  NUTSTREE — Reassurance Strip
+  4 icônes SVG custom, scroll horizontal mobile
+{% endcomment %}
+
+{%- style -%}
+  .nt-reassurance-{{ section.id }} {
+    --c-bg:      {{ section.settings.bg_color | default: '#FEFCF8' }};
+    --c-border:  rgba(59,79,42,.1);
+    --c-primary: {{ section.settings.color_primary | default: '#3B4F2A' }};
+    --c-accent:  {{ section.settings.color_accent  | default: '#C0622A' }};
+    --c-text:    {{ section.settings.color_text    | default: '#1E1E1E' }};
+    --c-muted:   {{ section.settings.color_muted   | default: '#6B6B5C' }};
+    --ff-body: 'Inter', sans-serif;
+    --ff-head: 'Playfair Display', serif;
+
+    background-color: var(--c-bg);
+    border-top: 1px solid var(--c-border);
+    border-bottom: 1px solid var(--c-border);
+    padding: 2rem 0;
+  }
+
+  .nt-reassurance__inner {
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 0;
+    padding: 0 1.25rem;
+  }
+
+  .nt-reassurance__inner::-webkit-scrollbar { display: none; }
+
+  @media (min-width: 750px) {
+    .nt-reassurance__inner {
+      overflow: visible;
+      justify-content: center;
+      gap: 0;
+      padding: 0 2rem;
+    }
+  }
+
+  .nt-reassurance__item {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    flex: 0 0 auto;
+    padding: 0.5rem 1.75rem;
+    position: relative;
+  }
+
+  .nt-reassurance__item + .nt-reassurance__item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 15%;
+    height: 70%;
+    width: 1px;
+    background: var(--c-border);
+  }
+
+  @media (max-width: 749px) {
+    .nt-reassurance__item {
+      padding: 0.25rem 1.25rem;
+    }
+  }
+
+  .nt-reassurance__icon {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(59,79,42,.07);
+    border-radius: 50%;
+    color: var(--c-primary);
+  }
+
+  @media (min-width: 750px) {
+    .nt-reassurance__icon {
+      width: 48px;
+      height: 48px;
+    }
+  }
+
+  .nt-reassurance__icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .nt-reassurance__text {}
+
+  .nt-reassurance__label {
+    font-family: var(--ff-body);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--c-text);
+    white-space: nowrap;
+    display: block;
+    line-height: 1.2;
+  }
+
+  .nt-reassurance__sublabel {
+    font-family: var(--ff-body);
+    font-size: 0.75rem;
+    color: var(--c-muted);
+    white-space: nowrap;
+    display: block;
+    margin-top: 2px;
+  }
+{%- endstyle -%}
+
+<div class="nt-reassurance-{{ section.id }}">
+  <div class="nt-reassurance__inner">
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'item' -%}
+          <div class="nt-reassurance__item" {{ block.shopify_attributes }}>
+            <div class="nt-reassurance__icon">
+              {%- case block.settings.icon -%}
+                {%- when 'leaf' -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+                {%- when 'truck' -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17H3v-9a2 2 0 0 1 2-2h10l4 4v7h-2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/><path d="M13 15H9"/><path d="M15 6h4l3 4v5h-3"/></svg>
+                {%- when 'star' -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                {%- when 'lock' -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                {%- when 'gift' -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect width="22" height="5" x="1" y="7"/><line x1="12" x2="12" y1="22" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+                {%- else -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              {%- endcase -%}
+            </div>
+            <div class="nt-reassurance__text">
+              <span class="nt-reassurance__label">{{ block.settings.label | escape }}</span>
+              {%- if block.settings.sublabel != blank -%}
+                <span class="nt-reassurance__sublabel">{{ block.settings.sublabel | escape }}</span>
+              {%- endif -%}
+            </div>
+          </div>
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Réassurance Nutstree",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Couleur de fond",
+      "default": "#FEFCF8"
+    },
+    {
+      "type": "color",
+      "id": "color_primary",
+      "label": "Couleur icônes",
+      "default": "#3B4F2A"
+    },
+    {
+      "type": "color",
+      "id": "color_accent",
+      "label": "Couleur accent",
+      "default": "#C0622A"
+    },
+    {
+      "type": "color",
+      "id": "color_text",
+      "label": "Texte",
+      "default": "#1E1E1E"
+    },
+    {
+      "type": "color",
+      "id": "color_muted",
+      "label": "Texte secondaire",
+      "default": "#6B6B5C"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Élément de réassurance",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icône",
+          "options": [
+            { "value": "leaf",  "label": "🌿 Feuille / Naturel" },
+            { "value": "truck", "label": "🚚 Camion / Livraison" },
+            { "value": "star",  "label": "⭐ Étoile / Qualité" },
+            { "value": "lock",  "label": "🔒 Cadenas / Sécurité" },
+            { "value": "gift",  "label": "🎁 Cadeau / Emballage" },
+            { "value": "check", "label": "✔ Vérification" }
+          ],
+          "default": "check"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Titre",
+          "default": "100% Naturel"
+        },
+        {
+          "type": "text",
+          "id": "sublabel",
+          "label": "Sous-titre",
+          "default": "Sans additifs ni conservateurs"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Réassurance Nutstree",
+      "blocks": [
+        { "type": "item", "settings": { "icon": "leaf",  "label": "100% Naturel",        "sublabel": "Sans additifs ni conservateurs" } },
+        { "type": "item", "settings": { "icon": "truck", "label": "Livraison Express",    "sublabel": "Partout au Maroc" } },
+        { "type": "item", "settings": { "icon": "star",  "label": "Qualité Artisanale",   "sublabel": "Sélectionné à la source" } },
+        { "type": "item", "settings": { "icon": "lock",  "label": "Paiement Sécurisé",    "sublabel": "100% sécurisé & fiable" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

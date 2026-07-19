@@ -1,387 +1,478 @@
-{% style %}
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600;700;900&display=swap');
+{% comment %}
+  NUTSTREE — Hero Section (Mobile-First Redesign)
+  Layout: Text + Image côte à côte dès le premier écran mobile
+{% endcomment %}
 
-  .hero-3d-{{ section.id }} {
-    /* Variables de marque */
-    --color-primary: {{ section.settings.color_primary | default: '#4A5D3A' }};
-    --color-secondary: {{ section.settings.color_secondary | default: '#B5651D' }};
-    --color-background: {{ section.settings.color_background | default: '#F5F0E6' }};
-    --color-surface: {{ section.settings.color_surface | default: '#FFFFFF' }};
-    --color-gold: {{ section.settings.color_gold | default: '#C5A55A' }};
-    --color-text: {{ section.settings.color_text | default: '#2C2C2C' }};
-    --font-heading: 'Playfair Display', serif;
-    --font-body: 'Inter', sans-serif;
-    
-    background-color: var(--color-background);
-    color: var(--color-text);
+{%- style -%}
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,600&family=Inter:wght@400;500;600&display=swap');
+
+  .nt-hero-{{ section.id }} {
+    --c-bg:       {{ section.settings.color_background | default: '#F5F0E6' }};
+    --c-primary:  {{ section.settings.color_primary    | default: '#3B4F2A' }};
+    --c-accent:   {{ section.settings.color_secondary  | default: '#C0622A' }};
+    --c-gold:     {{ section.settings.color_gold       | default: '#C5A55A' }};
+    --c-text:     {{ section.settings.color_text       | default: '#1E1E1E' }};
+    --c-muted:    {{ section.settings.color_muted      | default: '#6B6B5C' }};
+    --c-surface:  #FFFFFF;
+    --ff-head: 'Playfair Display', serif;
+    --ff-body: 'Inter', sans-serif;
+
+    background-color: var(--c-bg);
     position: relative;
-    overflow-x: hidden;
-    min-height: 100vh;
-    display: grid;
-    grid-template-columns: 1fr;
-    align-items: center;
-    padding: 8rem 1.5rem 6rem 1.5rem;
+    overflow: hidden;
+    min-height: 100svh;
   }
 
-  @media (min-width: 768px) {
-    .hero-3d-{{ section.id }} {
+  /* ── Background texture ── */
+  .nt-hero-{{ section.id }}::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+      radial-gradient(circle at 70% 20%, rgba(197,165,90,.08) 0%, transparent 60%),
+      radial-gradient(circle at 10% 80%, rgba(74,93,58,.06) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── Watermark ── */
+  .nt-hero__watermark {
+    position: absolute;
+    bottom: -2rem;
+    right: -1rem;
+    font-family: var(--ff-head);
+    font-size: clamp(5rem, 25vw, 14rem);
+    font-weight: 900;
+    color: var(--c-primary);
+    opacity: 0.025;
+    line-height: 1;
+    user-select: none;
+    pointer-events: none;
+    z-index: 0;
+    white-space: nowrap;
+  }
+
+  /* ── Layout ── */
+  .nt-hero__grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    min-height: 100svh;
+    align-items: center;
+    padding: 5.5rem 1.25rem 3rem 1.25rem;
+    gap: 0;
+  }
+
+  @media (min-width: 750px) {
+    .nt-hero__grid {
       grid-template-columns: 1fr 1fr;
-      padding: 4rem 5%;
+      padding: 4rem 5% 4rem 5%;
+      gap: 2rem;
     }
   }
 
-  /* Animations d'entrée */
-  @keyframes fade-in-up {
-    0% { opacity: 0; transform: translateY(20px); }
-    100% { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes fade-in-scale {
-    0% { opacity: 0; transform: scale(0.95); }
-    100% { opacity: 1; transform: scale(1); }
+  @media (min-width: 990px) {
+    .nt-hero__grid {
+      grid-template-columns: 55% 45%;
+      gap: 4rem;
+      padding: 0 6% 0 6%;
+    }
   }
 
-  /* Filigrane géant */
-  .hero-3d__watermark {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-family: var(--font-heading);
-    font-size: clamp(6rem, 20vw, 30rem);
-    font-weight: 900;
-    color: var(--color-text);
-    opacity: 0.02;
-    white-space: nowrap;
-    z-index: 0;
-    pointer-events: none;
-    user-select: none;
-  }
-
-  /* Contenu textuel */
-  .hero-3d__content {
-    position: relative;
-    z-index: 1;
+  /* ── Text column ── */
+  .nt-hero__content {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: flex-start;
-    padding-right: clamp(1rem, 5vw, 4rem);
+    gap: 0;
     opacity: 0;
-    animation: fade-in-up 1s ease-out 0.2s forwards;
+    animation: ntHeroFadeUp 0.8s ease-out 0.1s forwards;
   }
 
-  .hero-3d__eyebrow {
-    font-family: var(--font-heading);
-    font-size: clamp(0.85rem, 1.2vw, 1.1rem);
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--color-secondary);
-    margin-bottom: 1.5rem;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .hero-3d__eyebrow::before {
-    content: '';
-    display: block;
-    width: 40px;
-    height: 1px;
-    background-color: var(--color-secondary);
-  }
-
-  .hero-3d__title {
-    font-family: var(--font-heading);
-    font-size: clamp(2.5rem, 5vw + 1rem, 5.5rem);
-    line-height: 1.05;
-    color: var(--color-primary);
-    margin: 0 0 1.5rem 0;
-    font-weight: 700;
-  }
-
-  .hero-3d__description {
-    font-family: var(--font-body);
-    font-size: clamp(1.1rem, 1.5vw + 0.5rem, 1.35rem);
-    line-height: 1.8;
-    color: var(--color-text);
-    opacity: 0.8;
-    margin-bottom: 2.5rem;
-    max-width: 90%;
-  }
-
-  .hero-3d__buttons {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-    margin-bottom: 2rem;
-  }
-
-  /* Bouton Call to Action */
-  .hero-3d__btn {
+  /* ── Eyebrow ── */
+  .nt-hero__eyebrow {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    min-height: 48px;
-    padding: 1rem 2.5rem;
-    background-color: var(--color-primary);
-    color: var(--color-surface);
-    font-family: var(--font-body);
-    font-size: 1rem;
-    font-weight: 500;
-    text-decoration: none;
-    border-radius: 50px;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    border: 2px solid var(--color-primary);
-    cursor: pointer;
-    overflow: hidden;
-    position: relative;
+    gap: 0.6rem;
+    font-family: var(--ff-body);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--c-accent);
+    margin-bottom: 1rem;
   }
 
-  .hero-3d__btn--secondary {
-    background-color: transparent;
-    color: var(--color-primary);
-  }
-
-  .hero-3d__btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: all 0.6s ease;
-  }
-
-  .hero-3d__btn--secondary::before {
-    background: linear-gradient(90deg, transparent, rgba(74, 93, 58, 0.1), transparent);
-  }
-
-  .hero-3d__btn:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 15px 30px rgba(74, 93, 58, 0.25);
-  }
-  .hero-3d__btn:not(.hero-3d__btn--secondary):hover {
-    background-color: var(--color-primary);
-    color: var(--color-surface);
-  }
-  .hero-3d__btn--secondary:hover {
-    background-color: var(--color-primary);
-    color: var(--color-surface);
-  }
-
-  .hero-3d__btn:focus-visible {
-    outline: 2px solid var(--color-gold);
-    outline-offset: 4px;
-  }
-
-  .hero-3d__btn svg {
-    margin-left: 0.75rem;
-    transition: transform 0.3s ease;
-  }
-
-  .hero-3d__btn:hover svg {
-    transform: translateX(6px);
-  }
-
-  /* Visuel Produit */
-  .hero-3d__visual {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    margin-top: 4rem;
-  }
-
-  @media (min-width: 768px) {
-    .hero-3d__visual {
-      margin-top: 0;
-    }
-  }
-
-  @keyframes float-subtle {
-    0% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-20px) rotate(1deg); }
-    100% { transform: translateY(0px) rotate(0deg); }
-  }
-
-  .hero-3d__image-link {
+  .nt-hero__eyebrow-line {
     display: block;
-    cursor: pointer;
+    width: 28px;
+    height: 2px;
+    background: var(--c-accent);
+    border-radius: 2px;
   }
 
-  .hero-3d__image {
-    max-width: 100%;
-    width: clamp(280px, 45vw, 850px);
-    max-height: 85vh;
-    object-fit: contain;
-    /* Ombre complexe pour incrustation réaliste */
-    filter: drop-shadow(0 30px 40px rgba(0, 0, 0, 0.12)) 
-            drop-shadow(0 10px 20px rgba(74, 93, 58, 0.15)) 
-            drop-shadow(0 2px 5px rgba(181, 101, 29, 0.1));
-    animation: float-subtle 5s ease-in-out infinite;
-    transition: filter 0.3s ease;
+  /* ── Title ── */
+  .nt-hero__title {
+    font-family: var(--ff-head);
+    font-size: clamp(1.9rem, 5.5vw, 4.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--c-primary);
+    margin: 0 0 1rem 0;
+    word-break: break-word;
   }
 
-  .hero-3d__image-link:hover .hero-3d__image {
-    filter: drop-shadow(0 35px 50px rgba(0, 0, 0, 0.15)) 
-            drop-shadow(0 15px 25px rgba(74, 93, 58, 0.2)) 
-            drop-shadow(0 5px 10px rgba(181, 101, 29, 0.15));
+  .nt-hero__title em {
+    font-style: italic;
+    color: var(--c-accent);
   }
 
-  .hero-3d__trust-badges {
+  /* ── Description ── */
+  .nt-hero__desc {
+    font-family: var(--ff-body);
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    line-height: 1.7;
+    color: var(--c-muted);
+    margin: 0 0 1.75rem 0;
+    max-width: 38ch;
+  }
+
+  /* ── CTA buttons ── */
+  .nt-hero__actions {
     display: flex;
-    gap: 1.5rem;
     flex-wrap: wrap;
-    align-items: center;
-    margin-top: 1rem;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
   }
 
-  .hero-3d__trust-badge {
-    display: flex;
+  .nt-btn-primary {
+    display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    font-family: var(--font-body);
-    font-size: 0.85rem;
+    padding: 0.85rem 1.75rem;
+    min-height: 48px;
+    background: var(--c-accent);
+    color: #fff;
+    font-family: var(--ff-body);
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 100px;
+    border: 2px solid var(--c-accent);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    animation: ntPulse 3s ease-in-out 2s infinite;
+  }
+
+  @keyframes ntPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(192,98,42,.35); }
+    50%       { box-shadow: 0 0 0 8px rgba(192,98,42,0); }
+  }
+
+  .nt-btn-primary:hover, .nt-btn-primary:active {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 12px 28px rgba(192,98,42,.35);
+    animation: none;
+  }
+
+  .nt-btn-primary svg { transition: transform 0.25s ease; }
+  .nt-btn-primary:hover svg { transform: translateX(4px); }
+
+  .nt-btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.85rem 1.5rem;
+    min-height: 48px;
+    background: transparent;
+    color: var(--c-primary);
+    font-family: var(--ff-body);
+    font-size: 0.95rem;
     font-weight: 500;
-    color: var(--color-text);
-    opacity: 0.8;
+    text-decoration: none;
+    border-radius: 100px;
+    border: 2px solid rgba(59,79,42,.25);
+    cursor: pointer;
+    transition: all 0.25s ease;
   }
 
-  .hero-3d__trust-badge svg {
-    width: 20px;
-    height: 20px;
-    color: var(--color-secondary);
+  .nt-btn-ghost:hover {
+    border-color: var(--c-primary);
+    background: var(--c-primary);
+    color: #fff;
   }
 
-  /* Indicateur de scroll */
-  .hero-3d__scroll-indicator {
+  /* ── Social proof ── */
+  .nt-hero__proof {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .nt-hero__stars {
+    display: flex;
+    gap: 2px;
+  }
+
+  .nt-hero__stars svg { color: var(--c-gold); }
+
+  .nt-hero__proof-text {
+    font-family: var(--ff-body);
+    font-size: 0.82rem;
+    color: var(--c-muted);
+  }
+
+  .nt-hero__proof-text strong {
+    color: var(--c-text);
+    font-weight: 600;
+  }
+
+  /* ── Visual column ── */
+  .nt-hero__visual {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    animation: ntHeroFadeScale 0.9s ease-out 0.3s forwards;
+  }
+
+  @keyframes ntHeroFadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes ntHeroFadeScale {
+    from { opacity: 0; transform: scale(0.9); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  /* ── Decorative blob ── */
+  .nt-hero__blob {
     position: absolute;
-    bottom: 0;
+    width: clamp(140px, 35vw, 380px);
+    height: clamp(140px, 35vw, 380px);
+    background: radial-gradient(circle, rgba(197,165,90,.18) 0%, rgba(74,93,58,.1) 60%, transparent 100%);
+    border-radius: 50%;
+    z-index: 0;
+  }
+
+  /* ── Product image ── */
+  .nt-hero__img-link { display: block; position: relative; z-index: 1; }
+
+  .nt-hero__img {
+    width: clamp(140px, 42vw, 480px);
+    height: auto;
+    object-fit: contain;
+    filter:
+      drop-shadow(0 20px 35px rgba(0,0,0,.13))
+      drop-shadow(0 6px 12px rgba(74,93,58,.12));
+    animation: ntFloat 6s ease-in-out infinite;
+    display: block;
+  }
+
+  @keyframes ntFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50%       { transform: translateY(-12px) rotate(.8deg); }
+  }
+
+  .nt-hero__img-link:hover .nt-hero__img {
+    filter:
+      drop-shadow(0 28px 45px rgba(0,0,0,.18))
+      drop-shadow(0 10px 20px rgba(74,93,58,.18));
+  }
+
+  /* ── Badge flottant ── */
+  .nt-hero__badge {
+    position: absolute;
+    top: 10%;
+    right: -5%;
+    background: var(--c-primary);
+    color: #fff;
+    font-family: var(--ff-body);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.5rem 0.85rem;
+    border-radius: 100px;
+    box-shadow: 0 6px 20px rgba(59,79,42,.3);
+    white-space: nowrap;
+    z-index: 2;
+    animation: ntBadgePop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.8s both;
+  }
+
+  @keyframes ntBadgePop {
+    from { opacity: 0; transform: scale(0.5); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  /* ── Scroll indicator ── */
+  .nt-hero__scroll {
+    position: absolute;
+    bottom: 1.5rem;
     left: 50%;
     transform: translateX(-50%);
-    width: 1px;
-    height: 90px;
-    background-color: rgba(44, 44, 44, 0.15);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
     z-index: 2;
-    overflow: hidden;
   }
 
-  @keyframes scroll-dot {
-    0% { transform: translateY(-100%); opacity: 0; }
-    20% { opacity: 1; }
-    80% { opacity: 1; }
-    100% { transform: translateY(90px); opacity: 0; }
+  .nt-hero__scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--c-primary), transparent);
+    opacity: 0.4;
+    animation: ntScrollLine 2s ease-in-out infinite;
   }
 
-  .hero-3d__scroll-dot {
-    width: 5px;
-    height: 5px;
-    background-color: var(--color-gold);
-    border-radius: 50%;
-    position: absolute;
-    left: -2px;
-    top: 0;
-    animation: scroll-dot 2.5s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  @keyframes ntScrollLine {
+    0%, 100% { transform: scaleY(1); opacity: 0.4; }
+    50%       { transform: scaleY(0.5); opacity: 0.15; }
   }
-{% endstyle %}
 
-<div class="hero-3d-{{ section.id }}">
-  <!-- Filigrane de fond -->
-  <div class="hero-3d__watermark" aria-hidden="true">
-    {{ section.settings.watermark_text | default: shop.name }}
-  </div>
+  /* ── Mobile adjustments ── */
+  @media (max-width: 749px) {
+    .nt-hero__grid {
+      grid-template-columns: 1fr 1fr;
+      min-height: 100svh;
+      align-items: center;
+      padding: 5rem 1rem 3rem;
+    }
 
-  <!-- Colonne Texte -->
-  <div class="hero-3d__content">
-    {%- if section.settings.eyebrow != blank -%}
-      <div class="hero-3d__eyebrow">{{ section.settings.eyebrow }}</div>
-    {%- endif -%}
+    .nt-hero__desc {
+      display: none;
+    }
 
-    {%- if section.settings.title != blank -%}
-      <h1 class="hero-3d__title">{{ section.settings.title | escape }}</h1>
-    {%- endif -%}
+    .nt-hero__title {
+      font-size: clamp(1.6rem, 7vw, 2.2rem);
+    }
 
-    {%- if section.settings.description != blank -%}
-      <div class="hero-3d__description">{{ section.settings.description }}</div>
-    {%- endif -%}
+    .nt-hero__img {
+      width: clamp(130px, 45vw, 220px);
+    }
 
-    <div class="hero-3d__buttons">
-      {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
-        <a href="{{ section.settings.button_link }}" class="hero-3d__btn">
-          {{ section.settings.button_label | escape }}
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </a>
+    .nt-hero__badge {
+      font-size: 0.6rem;
+      padding: 0.35rem 0.6rem;
+      right: -8%;
+      top: 5%;
+    }
+
+    .nt-btn-primary, .nt-btn-ghost {
+      font-size: 0.85rem;
+      padding: 0.75rem 1.2rem;
+    }
+
+    .nt-hero__proof-text { font-size: 0.75rem; }
+
+    .nt-hero__scroll { display: none; }
+  }
+{%- endstyle -%}
+
+<div class="nt-hero-{{ section.id }}">
+  <div class="nt-hero__watermark" aria-hidden="true">{{ section.settings.watermark_text | default: 'Nutstree' }}</div>
+
+  <div class="nt-hero__grid">
+
+    {%- comment -%} ── TEXT COLUMN ── {%- endcomment -%}
+    <div class="nt-hero__content">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="nt-hero__eyebrow">
+          <span class="nt-hero__eyebrow-line"></span>
+          {{ section.settings.eyebrow | escape }}
+        </p>
       {%- endif -%}
-      
-      {%- if section.settings.button_label_2 != blank and section.settings.button_link_2 != blank -%}
-        <a href="{{ section.settings.button_link_2 }}" class="hero-3d__btn hero-3d__btn--secondary">
-          {{ section.settings.button_label_2 | escape }}
+
+      {%- if section.settings.title != blank -%}
+        <h1 class="nt-hero__title">{{ section.settings.title }}</h1>
+      {%- endif -%}
+
+      {%- if section.settings.description != blank -%}
+        <p class="nt-hero__desc">{{ section.settings.description }}</p>
+      {%- endif -%}
+
+      <div class="nt-hero__actions">
+        {%- if section.settings.btn_label != blank -%}
+          <a href="{{ section.settings.btn_link | default: '/collections/all' }}" class="nt-btn-primary" id="hero-cta-primary">
+            {{ section.settings.btn_label | escape }}
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        {%- endif -%}
+        {%- if section.settings.btn2_label != blank -%}
+          <a href="{{ section.settings.btn2_link | default: '/collections' }}" class="nt-btn-ghost" id="hero-cta-secondary">
+            {{ section.settings.btn2_label | escape }}
+          </a>
+        {%- endif -%}
+      </div>
+
+      <div class="nt-hero__proof">
+        <div class="nt-hero__stars" aria-label="5 étoiles">
+          {%- for i in (1..5) -%}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          {%- endfor -%}
+        </div>
+        <p class="nt-hero__proof-text">
+          <strong>{{ section.settings.proof_count | default: '200+' }}</strong> {{ section.settings.proof_text | default: 'clients satisfaits au Maroc' }}
+        </p>
+      </div>
+    </div>
+
+    {%- comment -%} ── IMAGE COLUMN ── {%- endcomment -%}
+    <div class="nt-hero__visual">
+      <div class="nt-hero__blob"></div>
+
+      {%- if section.settings.image_link != blank -%}
+        <a href="{{ section.settings.image_link }}" class="nt-hero__img-link" aria-label="Voir nos produits">
+      {%- else -%}
+        <div class="nt-hero__img-link">
+      {%- endif -%}
+
+        {%- if section.settings.image != blank -%}
+          {{ section.settings.image | image_url: width: 900 | image_tag:
+              class: 'nt-hero__img',
+              loading: 'eager',
+              alt: section.settings.image.alt | default: 'Produit Nutstree',
+              widths: '200, 350, 500, 700, 900',
+              sizes: '(max-width: 749px) 45vw, (max-width: 989px) 40vw, 420px'
+          }}
+        {%- else -%}
+          <img src="{{ 'product-sachet.png' | asset_url }}" class="nt-hero__img" alt="Nutstree — Fruits secs artisanaux" loading="eager" width="900" height="900">
+        {%- endif -%}
+
+        {%- if section.settings.badge_text != blank -%}
+          <span class="nt-hero__badge">{{ section.settings.badge_text | escape }}</span>
+        {%- endif -%}
+
+      {%- if section.settings.image_link != blank -%}
         </a>
+      {%- else -%}
+        </div>
       {%- endif -%}
     </div>
 
-    <!-- Badges de réassurance -->
-    <div class="hero-3d__trust-badges">
-      <div class="hero-3d__trust-badge">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-        100% Naturel
-      </div>
-      <div class="hero-3d__trust-badge">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-        Livraison rapide
-      </div>
-      <div class="hero-3d__trust-badge">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8V7a4 4 0 00-8 0v4h8z" /></svg>
-        Paiement sécurisé
-      </div>
-    </div>
   </div>
 
-  <!-- Colonne Produit -->
-  <div class="hero-3d__visual" style="opacity: 0; animation: fade-in-scale 1s ease-out 0.4s forwards;">
-    {%- if section.settings.image_link != blank -%}
-      <a href="{{ section.settings.image_link }}" class="hero-3d__image-link" aria-label="Voir la catégorie">
-    {%- endif -%}
-    
-    {%- if section.settings.image != blank -%}
-      {{ section.settings.image | image_url: width: 1500 | image_tag: 
-        class: 'hero-3d__image', 
-        loading: 'eager', 
-        alt: section.settings.image.alt | default: section.settings.title,
-        widths: '300, 500, 750, 1000, 1500'
-      }}
-    {%- else -%}
-      <img src="{{ 'product-sachet.png' | asset_url }}" class="hero-3d__image" alt="Sachet Nuts Tree" loading="eager" width="1500" height="auto">
-    {%- endif -%}
-
-    {%- if section.settings.image_link != blank -%}
-      </a>
-    {%- endif -%}
-  </div>
-
-  <!-- Indicateur de Scroll -->
-  <div class="hero-3d__scroll-indicator" aria-hidden="true">
-    <div class="hero-3d__scroll-dot"></div>
+  <div class="nt-hero__scroll" aria-hidden="true">
+    <div class="nt-hero__scroll-line"></div>
   </div>
 </div>
 
 {% schema %}
 {
-  "name": "Hero 3D Premium",
+  "name": "Hero Premium Nutstree",
   "tag": "section",
   "class": "section",
   "settings": [
     {
-      "type": "text",
-      "id": "watermark_text",
-      "label": "Texte en filigrane (Arrière-plan)",
-      "default": "Nuts Tree"
+      "type": "header",
+      "content": "Contenu"
     },
     {
       "type": "text",
@@ -392,94 +483,119 @@
     {
       "type": "textarea",
       "id": "title",
-      "label": "Titre principal",
-      "default": "Le meilleur de la nature,\ntorréfié avec passion"
+      "label": "Titre principal (HTML limité)",
+      "default": "Le meilleur de la nature, <em>torréfié</em> avec passion"
     },
     {
-      "type": "richtext",
+      "type": "textarea",
       "id": "description",
-      "label": "Description",
-      "default": "<p>Sélection artisanale, du producteur à votre table. Découvrez nos créations exclusives.</p>"
+      "label": "Description (masquée sur mobile pour clarté)",
+      "default": "Sélection artisanale, du producteur à votre table. Torréfié avec soin, livré frais au Maroc."
     },
     {
       "type": "text",
-      "id": "button_label",
-      "label": "Texte du bouton",
+      "id": "btn_label",
+      "label": "Bouton principal — Texte",
       "default": "Découvrir la boutique"
     },
     {
       "type": "url",
-      "id": "button_link",
-      "label": "Lien du bouton principal"
+      "id": "btn_link",
+      "label": "Bouton principal — Lien"
     },
     {
       "type": "text",
-      "id": "button_label_2",
-      "label": "Texte du bouton secondaire",
-      "default": "Voir nos catégories"
+      "id": "btn2_label",
+      "label": "Bouton secondaire — Texte",
+      "default": "Nos catégories"
     },
     {
       "type": "url",
-      "id": "button_link_2",
-      "label": "Lien du bouton secondaire"
+      "id": "btn2_link",
+      "label": "Bouton secondaire — Lien"
+    },
+    {
+      "type": "text",
+      "id": "proof_count",
+      "label": "Nombre de clients (preuve sociale)",
+      "default": "200+"
+    },
+    {
+      "type": "text",
+      "id": "proof_text",
+      "label": "Texte preuve sociale",
+      "default": "clients satisfaits au Maroc"
+    },
+    {
+      "type": "header",
+      "content": "Image produit"
     },
     {
       "type": "image_picker",
       "id": "image",
-      "label": "Image du produit",
-      "info": "Utilisez de préférence une image sans fond (PNG transparent) pour un rendu 3D parfait."
+      "label": "Photo produit (PNG sans fond recommandé)"
     },
     {
       "type": "url",
       "id": "image_link",
-      "label": "Lien de l'image",
-      "info": "Rend l'image cliquable (ex: lien vers les catégories)."
+      "label": "Lien au clic sur l'image"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge flottant",
+      "default": "100% Artisanal"
+    },
+    {
+      "type": "text",
+      "id": "watermark_text",
+      "label": "Texte en filigrane",
+      "default": "Nutstree"
     },
     {
       "type": "header",
-      "content": "Couleurs (CSS Custom Properties)"
+      "content": "Couleurs"
+    },
+    {
+      "type": "color",
+      "id": "color_background",
+      "label": "Fond",
+      "default": "#F5F0E6"
     },
     {
       "type": "color",
       "id": "color_primary",
       "label": "Primaire (Vert olive)",
-      "default": "#4A5D3A"
+      "default": "#3B4F2A"
     },
     {
       "type": "color",
       "id": "color_secondary",
-      "label": "Secondaire (Terracotta)",
-      "default": "#B5651D"
-    },
-    {
-      "type": "color",
-      "id": "color_background",
-      "label": "Fond (Crème)",
-      "default": "#F5F0E6"
-    },
-    {
-      "type": "color",
-      "id": "color_text",
-      "label": "Texte (Quasi-noir)",
-      "default": "#2C2C2C"
-    },
-    {
-      "type": "color",
-      "id": "color_surface",
-      "label": "Surface (Blanc)",
-      "default": "#FFFFFF"
+      "label": "Accent (Terracotta)",
+      "default": "#C0622A"
     },
     {
       "type": "color",
       "id": "color_gold",
-      "label": "Doré",
+      "label": "Doré (Étoiles)",
       "default": "#C5A55A"
+    },
+    {
+      "type": "color",
+      "id": "color_text",
+      "label": "Texte",
+      "default": "#1E1E1E"
+    },
+    {
+      "type": "color",
+      "id": "color_muted",
+      "label": "Texte secondaire",
+      "default": "#6B6B5C"
     }
   ],
   "presets": [
     {
-      "name": "Hero 3D Premium",
-      "category": "Image"
+      "name": "Hero Premium Nutstree"
     }
   ]
 }

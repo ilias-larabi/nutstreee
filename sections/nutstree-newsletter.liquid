@@ -1,0 +1,371 @@
+{% comment %}
+  NUTSTREE — Newsletter Premium
+  Fond terracotta gradient, offre -10%, formulaire Shopify natif
+{% endcomment %}
+
+{%- style -%}
+  .nt-newsletter-{{ section.id }} {
+    --c-bg-from:  {{ section.settings.color_from  | default: '#C0622A' }};
+    --c-bg-to:    {{ section.settings.color_to    | default: '#8B3E18' }};
+    --c-text:     #FFFFFF;
+    --c-muted:    rgba(255,255,255,.75);
+    --c-input-bg: rgba(255,255,255,.15);
+    --c-input-border: rgba(255,255,255,.3);
+    --c-btn:      #FFFFFF;
+    --c-btn-text: {{ section.settings.color_from | default: '#C0622A' }};
+    --ff-head: 'Playfair Display', serif;
+    --ff-body: 'Inter', sans-serif;
+
+    background: linear-gradient(135deg, var(--c-bg-from) 0%, var(--c-bg-to) 100%);
+    position: relative;
+    overflow: hidden;
+    padding: 5rem 1.5rem;
+  }
+
+  /* Decorative circles */
+  .nt-newsletter-{{ section.id }}::before,
+  .nt-newsletter-{{ section.id }}::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .nt-newsletter-{{ section.id }}::before {
+    width: 500px;
+    height: 500px;
+    background: rgba(255,255,255,.05);
+    top: -200px;
+    right: -150px;
+  }
+
+  .nt-newsletter-{{ section.id }}::after {
+    width: 300px;
+    height: 300px;
+    background: rgba(255,255,255,.04);
+    bottom: -100px;
+    left: -80px;
+  }
+
+  .nt-newsletter__inner {
+    position: relative;
+    z-index: 1;
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  /* ── Offer badge ── */
+  .nt-newsletter__offer {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255,255,255,.2);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,.3);
+    border-radius: 100px;
+    padding: 0.45rem 1.1rem;
+    font-family: var(--ff-body);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  .nt-newsletter__offer-tag {
+    background: #fff;
+    color: var(--c-bg-from);
+    border-radius: 100px;
+    padding: 0.2rem 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 800;
+  }
+
+  /* ── Title ── */
+  .nt-newsletter__title {
+    font-family: var(--ff-head);
+    font-size: clamp(1.75rem, 5vw, 3rem);
+    font-weight: 700;
+    color: var(--c-text);
+    margin: 0;
+    line-height: 1.15;
+  }
+
+  /* ── Subtitle ── */
+  .nt-newsletter__subtitle {
+    font-family: var(--ff-body);
+    font-size: clamp(0.9rem, 2vw, 1.05rem);
+    color: var(--c-muted);
+    margin: 0;
+    line-height: 1.6;
+    max-width: 44ch;
+  }
+
+  /* ── Form ── */
+  .nt-newsletter__form {
+    display: flex;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 460px;
+    flex-wrap: wrap;
+  }
+
+  @media (min-width: 480px) {
+    .nt-newsletter__form { flex-wrap: nowrap; }
+  }
+
+  .nt-newsletter__input {
+    flex: 1;
+    min-width: 0;
+    height: 52px;
+    padding: 0 1.25rem;
+    background: var(--c-input-bg);
+    border: 1.5px solid var(--c-input-border);
+    border-radius: 100px;
+    color: #fff;
+    font-family: var(--ff-body);
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.25s ease, background 0.25s ease;
+    backdrop-filter: blur(8px);
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .nt-newsletter__input::placeholder { color: rgba(255,255,255,.55); }
+
+  .nt-newsletter__input:focus {
+    border-color: rgba(255,255,255,.7);
+    background: rgba(255,255,255,.2);
+  }
+
+  .nt-newsletter__btn {
+    height: 52px;
+    padding: 0 1.75rem;
+    background: var(--c-btn);
+    color: var(--c-btn-text);
+    font-family: var(--ff-body);
+    font-size: 0.95rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 100px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    min-width: 130px;
+  }
+
+  .nt-newsletter__btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(0,0,0,.2);
+  }
+
+  /* ── Disclaimer ── */
+  .nt-newsletter__disclaimer {
+    font-family: var(--ff-body);
+    font-size: 0.75rem;
+    color: var(--c-muted);
+    margin: 0;
+  }
+
+  /* ── Social proof row ── */
+  .nt-newsletter__social-proof {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .nt-newsletter__avatars {
+    display: flex;
+  }
+
+  .nt-newsletter__avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,.5);
+    background: linear-gradient(135deg, #4A5D3A, #2C3A1E);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #fff;
+    margin-left: -8px;
+  }
+
+  .nt-newsletter__avatars .nt-newsletter__avatar:first-child { margin-left: 0; }
+
+  .nt-newsletter__social-text {
+    font-family: var(--ff-body);
+    font-size: 0.82rem;
+    color: var(--c-muted);
+  }
+
+  .nt-newsletter__social-text strong { color: #fff; }
+{%- endstyle -%}
+
+<div class="nt-newsletter-{{ section.id }}">
+  <div class="nt-newsletter__inner">
+
+    <div class="nt-newsletter__offer">
+      <span class="nt-newsletter__offer-tag">{{ section.settings.offer_tag | default: '-10%' }}</span>
+      {{ section.settings.offer_text | default: 'Offre de bienvenue' | escape }}
+    </div>
+
+    {%- if section.settings.title != blank -%}
+      <h2 class="nt-newsletter__title">{{ section.settings.title | escape }}</h2>
+    {%- endif -%}
+
+    {%- if section.settings.subtitle != blank -%}
+      <p class="nt-newsletter__subtitle">{{ section.settings.subtitle | escape }}</p>
+    {%- endif -%}
+
+    <div class="nt-newsletter__social-proof">
+      <div class="nt-newsletter__avatars">
+        <div class="nt-newsletter__avatar">F</div>
+        <div class="nt-newsletter__avatar">K</div>
+        <div class="nt-newsletter__avatar">Z</div>
+        <div class="nt-newsletter__avatar">A</div>
+      </div>
+      <p class="nt-newsletter__social-text">
+        <strong>{{ section.settings.subscribers | default: '500+' }}</strong> {{ section.settings.subscribers_text | default: 'gourmands déjà inscrits' }}
+      </p>
+    </div>
+
+    {%- form 'customer', id: 'newsletter-form-nt-{{ section.id }}' -%}
+      <input type="hidden" name="contact[tags]" value="newsletter">
+      <div class="nt-newsletter__form">
+        <label for="newsletter-email-{{ section.id }}" class="visually-hidden">{{ section.settings.input_placeholder | default: 'Votre adresse e-mail' }}</label>
+        <input
+          type="email"
+          name="contact[email]"
+          id="newsletter-email-{{ section.id }}"
+          class="nt-newsletter__input"
+          placeholder="{{ section.settings.input_placeholder | default: 'Votre adresse e-mail' }}"
+          required
+          autocomplete="email"
+          aria-label="{{ section.settings.input_placeholder | default: 'Votre adresse e-mail' }}"
+        >
+        <button type="submit" class="nt-newsletter__btn" id="newsletter-submit-{{ section.id }}">
+          {{ section.settings.btn_label | default: "J'en profite" | escape }}
+        </button>
+      </div>
+
+      {%- if form.posted_successfully? -%}
+        <p style="color:#fff;font-family:var(--ff-body);font-size:0.95rem;">
+          🎉 {{ section.settings.success_msg | default: 'Merci ! Votre code -10% arrive dans votre boîte mail.' | escape }}
+        </p>
+      {%- endif -%}
+    {%- endform -%}
+
+    <p class="nt-newsletter__disclaimer">{{ section.settings.disclaimer | default: 'Pas de spam. Désinscription en un clic.' | escape }}</p>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Newsletter Premium",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Offre & Texte"
+    },
+    {
+      "type": "text",
+      "id": "offer_tag",
+      "label": "Badge offre",
+      "default": "-10%"
+    },
+    {
+      "type": "text",
+      "id": "offer_text",
+      "label": "Texte à côté du badge",
+      "default": "Offre de bienvenue"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titre",
+      "default": "Rejoignez la communauté Nutstree"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Sous-titre",
+      "default": "Inscrivez-vous à notre newsletter et recevez -10% sur votre première commande + nos actualités et recettes exclusives."
+    },
+    {
+      "type": "text",
+      "id": "subscribers",
+      "label": "Nombre d'abonnés",
+      "default": "500+"
+    },
+    {
+      "type": "text",
+      "id": "subscribers_text",
+      "label": "Texte abonnés",
+      "default": "gourmands déjà inscrits"
+    },
+    {
+      "type": "header",
+      "content": "Formulaire"
+    },
+    {
+      "type": "text",
+      "id": "input_placeholder",
+      "label": "Placeholder email",
+      "default": "Votre adresse e-mail"
+    },
+    {
+      "type": "text",
+      "id": "btn_label",
+      "label": "Texte du bouton",
+      "default": "J'en profite !"
+    },
+    {
+      "type": "text",
+      "id": "disclaimer",
+      "label": "Mention légale",
+      "default": "Pas de spam. Désinscription en un clic."
+    },
+    {
+      "type": "text",
+      "id": "success_msg",
+      "label": "Message de succès",
+      "default": "Merci ! Votre code -10% arrive dans votre boîte mail."
+    },
+    {
+      "type": "header",
+      "content": "Couleurs (dégradé)"
+    },
+    {
+      "type": "color",
+      "id": "color_from",
+      "label": "Couleur départ",
+      "default": "#C0622A"
+    },
+    {
+      "type": "color",
+      "id": "color_to",
+      "label": "Couleur arrivée",
+      "default": "#8B3E18"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter Premium"
+    }
+  ]
+}
+{% endschema %}

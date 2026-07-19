@@ -3,79 +3,41 @@
     "hero_3d": {
       "type": "hero-3d",
       "settings": {
-        "watermark_text": "Nuts Tree",
         "eyebrow": "Fruits secs d'exception",
-        "title": "Le meilleur de la nature,\ntorréfié avec passion",
-        "description": "<p>Sélection artisanale, du producteur à votre table. Découvrez nos créations exclusives.<\/p>",
-        "button_label": "Découvrir la boutique",
-        "button_link": "shopify:\/\/collections\/all",
+        "title": "Le meilleur de la nature, <em>torréfié</em> avec passion",
+        "description": "Sélection artisanale, du producteur à votre table. Torréfié avec soin, livré frais au Maroc.",
+        "btn_label": "Découvrir la boutique",
+        "btn_link": "shopify:\/\/collections\/all",
+        "btn2_label": "Nos catégories",
+        "btn2_link": "shopify:\/\/collections",
+        "proof_count": "200+",
+        "proof_text": "clients satisfaits au Maroc",
         "image_link": "shopify:\/\/collections\/all",
-        "color_primary": "#4A5D3A",
-        "color_secondary": "#B5651D",
+        "badge_text": "100% Artisanal",
+        "watermark_text": "Nutstree",
         "color_background": "#F5F0E6",
-        "color_text": "#2C2C2C",
-        "color_surface": "#FFFFFF",
-        "color_gold": "#C5A55A"
+        "color_primary": "#3B4F2A",
+        "color_secondary": "#C0622A",
+        "color_gold": "#C5A55A",
+        "color_text": "#1E1E1E",
+        "color_muted": "#6B6B5C"
       }
     },
-    "premium_categories": {
-      "type": "premium-collection-list",
+    "reassurance": {
+      "type": "nutstree-reassurance",
       "blocks": {
-        "block_1": {
-          "type": "collection",
-          "settings": {
-            "title": "Fruits secs"
-          }
-        },
-        "block_2": {
-          "type": "collection",
-          "settings": {
-            "title": "Miel"
-          }
-        },
-        "block_3": {
-          "type": "collection",
-          "settings": {
-            "title": "Chocolat"
-          }
-        },
-        "block_4": {
-          "type": "collection",
-          "settings": {
-            "title": "Fruits confits"
-          }
-        },
-        "block_5": {
-          "type": "collection",
-          "settings": {
-            "title": "Épices"
-          }
-        },
-        "block_6": {
-          "type": "collection",
-          "settings": {
-            "title": "Cadeaux / Coffrets"
-          }
-        }
+        "r1": { "type": "item", "settings": { "icon": "leaf",  "label": "100% Naturel",        "sublabel": "Sans additifs ni conservateurs" } },
+        "r2": { "type": "item", "settings": { "icon": "truck", "label": "Livraison Express",    "sublabel": "Partout au Maroc" } },
+        "r3": { "type": "item", "settings": { "icon": "star",  "label": "Qualité Artisanale",   "sublabel": "Sélectionné à la source" } },
+        "r4": { "type": "item", "settings": { "icon": "lock",  "label": "Paiement Sécurisé",    "sublabel": "100% sécurisé & fiable" } }
       },
-      "block_order": [
-        "block_1",
-        "block_2",
-        "block_3",
-        "block_4",
-        "block_5",
-        "block_6"
-      ],
+      "block_order": ["r1", "r2", "r3", "r4"],
       "settings": {
-        "title": "Découvrez nos univers",
-        "columns_desktop": 3,
-        "show_view_all": true,
-        "view_all_text": "Voir toutes les catégories",
-        "color_primary": "#4A5D3A",
-        "color_secondary": "#B5651D",
-        "color_background": "#F5F0E6",
-        "color_text": "#2C2C2C",
-        "color_surface": "#FFFFFF"
+        "bg_color": "#FEFCF8",
+        "color_primary": "#3B4F2A",
+        "color_accent": "#C0622A",
+        "color_text": "#1E1E1E",
+        "color_muted": "#6B6B5C"
       }
     },
     "featured_collection": {
@@ -87,29 +49,137 @@
         "show_description": false,
         "description_style": "body",
         "collection": "all",
-        "products_to_show": 8,
+        "products_to_show": 4,
         "columns_desktop": 4,
         "color_scheme": "scheme-1",
         "full_width": false,
         "show_view_all": true,
         "view_all_style": "solid",
         "enable_desktop_slider": false,
-        "swipe_on_mobile": false,
+        "swipe_on_mobile": true,
         "image_ratio": "adapt",
         "image_shape": "default",
         "show_secondary_image": true,
         "show_vendor": false,
         "show_rating": false,
-        "quick_add": "none",
+        "quick_add": "standard",
         "columns_mobile": "2",
-        "padding_top": 44,
-        "padding_bottom": 36
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "nutstree_story": {
+      "type": "nutstree-storytelling",
+      "settings": {
+        "year_badge": "Fondé en 2018",
+        "eyebrow": "Notre savoir-faire",
+        "title": "Une passion transmise, un engagement naturel",
+        "text": "<p>Chez Nutstree, chaque fruit sec est soigneusement sélectionné à la source, torréfié artisanalement pour révéler toutes ses saveurs. Notre mission : vous apporter le meilleur de la nature, directement du producteur à votre table.</p><p>Fruits secs, miel, épices et coffrets cadeaux — tout est préparé avec soin et expédié frais partout au Maroc.</p>",
+        "btn_label": "Découvrir notre histoire",
+        "stat1_number": "200+",
+        "stat1_label": "Clients fidèles",
+        "stat2_number": "15+",
+        "stat2_label": "Variétés de produits",
+        "stat3_number": "100%",
+        "stat3_label": "Naturel & artisanal",
+        "color_background": "#3B4F2A",
+        "color_text": "#F5F0E6",
+        "color_accent": "#C5A55A"
+      }
+    },
+    "premium_categories": {
+      "type": "premium-collection-list",
+      "blocks": {
+        "block_1": { "type": "collection", "settings": { "title": "Fruits secs" } },
+        "block_2": { "type": "collection", "settings": { "title": "Miel" } },
+        "block_3": { "type": "collection", "settings": { "title": "Chocolat" } },
+        "block_4": { "type": "collection", "settings": { "title": "Fruits confits" } },
+        "block_5": { "type": "collection", "settings": { "title": "Épices" } },
+        "block_6": { "type": "collection", "settings": { "title": "Cadeaux \/ Coffrets" } }
+      },
+      "block_order": ["block_1", "block_2", "block_3", "block_4", "block_5", "block_6"],
+      "settings": {
+        "title": "Découvrez nos univers",
+        "columns_desktop": 3,
+        "show_view_all": true,
+        "view_all_text": "Voir toutes les catégories",
+        "color_primary": "#3B4F2A",
+        "color_secondary": "#C0622A",
+        "color_background": "#F5F0E6",
+        "color_text": "#1E1E1E",
+        "color_surface": "#FFFFFF"
+      }
+    },
+    "reviews": {
+      "type": "nutstree-reviews",
+      "blocks": {
+        "rv1": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "Produits de qualité exceptionnelle ! Les pistaches sont fraîches, bien torréfiées et très savoureuses. Livraison rapide et emballage soigné. Je recommande vivement !",
+            "name": "Fatima Z.",
+            "location": "Casablanca"
+          }
+        },
+        "rv2": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "J'ai commandé le coffret cadeau pour un anniversaire et c'était parfait. Présentation magnifique, produits frais et délicieux. Ma famille a adoré !",
+            "name": "Karim M.",
+            "location": "Rabat"
+          }
+        },
+        "rv3": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "Le miel est incroyable, on sent vraiment la différence avec les produits industriels. Et les amandes grillées au sel sont juste addictives. Commande reçue en 48h !",
+            "name": "Zineb A.",
+            "location": "Marrakech"
+          }
+        }
+      },
+      "block_order": ["rv1", "rv2", "rv3"],
+      "settings": {
+        "eyebrow": "Ce que disent nos clients",
+        "title": "Ils ont adoré Nutstree",
+        "overall_text": "Note moyenne : 5\/5 — 200+ avis clients vérifiés",
+        "color_background": "#EEF0E8",
+        "color_card": "#FFFFFF",
+        "color_primary": "#3B4F2A",
+        "color_accent": "#C0622A",
+        "color_gold": "#C5A55A",
+        "color_text": "#1E1E1E",
+        "color_muted": "#6B6B5C"
+      }
+    },
+    "newsletter": {
+      "type": "nutstree-newsletter",
+      "settings": {
+        "offer_tag": "-10%",
+        "offer_text": "Offre de bienvenue",
+        "title": "Rejoignez la communauté Nutstree",
+        "subtitle": "Inscrivez-vous à notre newsletter et recevez -10% sur votre première commande + nos actualités et recettes exclusives.",
+        "subscribers": "500+",
+        "subscribers_text": "gourmands déjà inscrits",
+        "input_placeholder": "Votre adresse e-mail",
+        "btn_label": "J'en profite !",
+        "disclaimer": "Pas de spam. Désinscription en un clic.",
+        "success_msg": "Merci ! Votre code -10% arrive dans votre boîte mail.",
+        "color_from": "#C0622A",
+        "color_to": "#8B3E18"
       }
     }
   },
   "order": [
     "hero_3d",
+    "reassurance",
+    "featured_collection",
+    "nutstree_story",
     "premium_categories",
-    "featured_collection"
+    "reviews",
+    "newsletter"
   ]
 }

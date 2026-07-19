@@ -1,0 +1,392 @@
+{% comment %}
+  NUTSTREE — Reviews Section
+  3 cartes d'avis clients, fond vert olive, carousel mobile
+{% endcomment %}
+
+{%- style -%}
+  .nt-reviews-{{ section.id }} {
+    --c-bg:       {{ section.settings.color_background | default: '#EEF0E8' }};
+    --c-card:     {{ section.settings.color_card       | default: '#FFFFFF' }};
+    --c-primary:  {{ section.settings.color_primary    | default: '#3B4F2A' }};
+    --c-accent:   {{ section.settings.color_accent     | default: '#C0622A' }};
+    --c-gold:     {{ section.settings.color_gold       | default: '#C5A55A' }};
+    --c-text:     {{ section.settings.color_text       | default: '#1E1E1E' }};
+    --c-muted:    {{ section.settings.color_muted      | default: '#6B6B5C' }};
+    --ff-head: 'Playfair Display', serif;
+    --ff-body: 'Inter', sans-serif;
+
+    background-color: var(--c-bg);
+    padding: 5rem 0;
+    overflow: hidden;
+  }
+
+  .nt-reviews__header {
+    text-align: center;
+    padding: 0 1.25rem;
+    margin-bottom: 3rem;
+  }
+
+  .nt-reviews__eyebrow {
+    font-family: var(--ff-body);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--c-accent);
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+
+  .nt-reviews__title {
+    font-family: var(--ff-head);
+    font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+    font-weight: 700;
+    color: var(--c-primary);
+    margin: 0;
+  }
+
+  /* ── Carousel ── */
+  .nt-reviews__track {
+    display: flex;
+    gap: 1.25rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 0.5rem 1.25rem 1.5rem;
+    scroll-snap-type: x mandatory;
+  }
+
+  .nt-reviews__track::-webkit-scrollbar { display: none; }
+
+  @media (min-width: 750px) {
+    .nt-reviews__track {
+      overflow: visible;
+      display: grid;
+      grid-template-columns: repeat({{ section.blocks.size | at_most: 3 }}, 1fr);
+      gap: 1.5rem;
+      padding: 0.5rem 3rem 1.5rem;
+    }
+  }
+
+  @media (min-width: 990px) {
+    .nt-reviews__track {
+      padding: 0.5rem 6% 1.5rem;
+    }
+  }
+
+  /* ── Card ── */
+  .nt-review-card {
+    flex: 0 0 85%;
+    scroll-snap-align: start;
+    background: var(--c-card);
+    border-radius: 16px;
+    padding: 1.75rem;
+    box-shadow: 0 2px 20px rgba(59,79,42,.06), 0 1px 4px rgba(0,0,0,.04);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  @media (min-width: 750px) {
+    .nt-review-card {
+      flex: unset;
+    }
+  }
+
+  .nt-review-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 35px rgba(59,79,42,.1), 0 4px 12px rgba(0,0,0,.06);
+  }
+
+  /* ── Stars ── */
+  .nt-review-card__stars {
+    display: flex;
+    gap: 3px;
+    color: var(--c-gold);
+  }
+
+  .nt-review-card__stars svg { width: 18px; height: 18px; }
+
+  /* ── Quote icon ── */
+  .nt-review-card__quote {
+    color: var(--c-primary);
+    opacity: 0.12;
+    align-self: flex-end;
+    margin-top: -0.5rem;
+  }
+
+  .nt-review-card__quote svg { width: 36px; height: 36px; }
+
+  /* ── Text ── */
+  .nt-review-card__text {
+    font-family: var(--ff-body);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--c-text);
+    flex: 1;
+    font-style: italic;
+  }
+
+  /* ── Author ── */
+  .nt-review-card__author {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(59,79,42,.08);
+  }
+
+  .nt-review-card__avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--c-primary), #5A7A40);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--ff-head);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+    text-transform: uppercase;
+  }
+
+  .nt-review-card__author-info {}
+
+  .nt-review-card__name {
+    font-family: var(--ff-body);
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--c-text);
+    display: block;
+  }
+
+  .nt-review-card__location {
+    font-family: var(--ff-body);
+    font-size: 0.78rem;
+    color: var(--c-muted);
+    display: block;
+  }
+
+  /* ── Overall rating ── */
+  .nt-reviews__overall {
+    text-align: center;
+    margin-top: 2.5rem;
+    padding: 0 1.25rem;
+  }
+
+  .nt-reviews__overall-stars {
+    display: inline-flex;
+    gap: 4px;
+    color: var(--c-gold);
+    margin-bottom: 0.4rem;
+  }
+
+  .nt-reviews__overall-stars svg { width: 22px; height: 22px; }
+
+  .nt-reviews__overall-text {
+    font-family: var(--ff-body);
+    font-size: 0.85rem;
+    color: var(--c-muted);
+    display: block;
+  }
+{%- endstyle -%}
+
+<div class="nt-reviews-{{ section.id }}">
+  <div class="nt-reviews__header">
+    {%- if section.settings.eyebrow != blank -%}
+      <span class="nt-reviews__eyebrow">{{ section.settings.eyebrow | escape }}</span>
+    {%- endif -%}
+    {%- if section.settings.title != blank -%}
+      <h2 class="nt-reviews__title">{{ section.settings.title | escape }}</h2>
+    {%- endif -%}
+  </div>
+
+  <div class="nt-reviews__track">
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'review' -%}
+        <div class="nt-review-card" {{ block.shopify_attributes }}>
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+            <div class="nt-review-card__stars">
+              {%- assign stars = block.settings.rating | default: 5 -%}
+              {%- for i in (1..stars) -%}
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              {%- endfor -%}
+            </div>
+            <div class="nt-review-card__quote">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+            </div>
+          </div>
+
+          {%- if block.settings.text != blank -%}
+            <p class="nt-review-card__text">{{ block.settings.text | escape }}</p>
+          {%- endif -%}
+
+          <div class="nt-review-card__author">
+            <div class="nt-review-card__avatar">{{ block.settings.name | truncate: 1, '' }}</div>
+            <div class="nt-review-card__author-info">
+              <span class="nt-review-card__name">{{ block.settings.name | default: 'Client' | escape }}</span>
+              {%- if block.settings.location != blank -%}
+                <span class="nt-review-card__location">{{ block.settings.location | escape }}</span>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+
+  <div class="nt-reviews__overall">
+    <div class="nt-reviews__overall-stars">
+      {%- for i in (1..5) -%}
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      {%- endfor -%}
+    </div>
+    <span class="nt-reviews__overall-text">{{ section.settings.overall_text | default: 'Note moyenne : 5/5 — 200+ avis clients vérifiés' }}</span>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Avis Clients",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Surtitre",
+      "default": "Ce que disent nos clients"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titre",
+      "default": "Ils ont adoré Nutstree"
+    },
+    {
+      "type": "text",
+      "id": "overall_text",
+      "label": "Texte note globale",
+      "default": "Note moyenne : 5/5 — 200+ avis clients vérifiés"
+    },
+    {
+      "type": "header",
+      "content": "Couleurs"
+    },
+    {
+      "type": "color",
+      "id": "color_background",
+      "label": "Fond section",
+      "default": "#EEF0E8"
+    },
+    {
+      "type": "color",
+      "id": "color_card",
+      "label": "Fond carte",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "color_primary",
+      "label": "Couleur primaire",
+      "default": "#3B4F2A"
+    },
+    {
+      "type": "color",
+      "id": "color_accent",
+      "label": "Accent",
+      "default": "#C0622A"
+    },
+    {
+      "type": "color",
+      "id": "color_gold",
+      "label": "Étoiles",
+      "default": "#C5A55A"
+    },
+    {
+      "type": "color",
+      "id": "color_text",
+      "label": "Texte",
+      "default": "#1E1E1E"
+    },
+    {
+      "type": "color",
+      "id": "color_muted",
+      "label": "Texte secondaire",
+      "default": "#6B6B5C"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Avis client",
+      "settings": [
+        {
+          "type": "range",
+          "id": "rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5,
+          "label": "Note (étoiles)"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Texte de l'avis",
+          "default": "Produits de qualité exceptionnelle ! Les pistaches sont fraîches, bien torréfiées et très savoureuses. Livraison rapide et emballage soigné. Je recommande vivement !"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Prénom du client",
+          "default": "Fatima Z."
+        },
+        {
+          "type": "text",
+          "id": "location",
+          "label": "Ville",
+          "default": "Casablanca"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Avis Clients",
+      "blocks": [
+        {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "Produits de qualité exceptionnelle ! Les pistaches sont fraîches, bien torréfiées et très savoureuses. Livraison rapide et emballage soigné. Je recommande vivement !",
+            "name": "Fatima Z.",
+            "location": "Casablanca"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "J'ai commandé le coffret cadeau pour un anniversaire et c'était parfait. Présentation magnifique, produits frais et délicieux. Ma famille a adoré !",
+            "name": "Karim M.",
+            "location": "Rabat"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "Le miel est incroyable, on sent vraiment la différence avec les produits industriels. Et les amandes grillées au sel sont juste addictives. Commande reçue en 48h !",
+            "name": "Zineb A.",
+            "location": "Marrakech"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
