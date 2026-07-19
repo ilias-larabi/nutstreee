@@ -1,9 +1,8 @@
 /**
- * NUTSTREE — Sticky Add to Cart JS
- * - IntersectionObserver watches the main ATC button
- * - Shows/hides the sticky bar when main button exits viewport
- * - Syncs variant title, price, availability with main product form
- * - Submits to same cart endpoint as main form
+ * NUTSTREE — Premium Sticky Add to Cart JS
+ * - Watches main button to show/hide sticky bar
+ * - Syncs price and selected variant
+ * - Bidirectional variant sync (Main form <-> Sticky Bar)
  */
 
 (function () {
@@ -13,18 +12,21 @@
     mainBtn:       '#MainProduct-{{ section.id }} .product-form__submit, .product-form__submit',
     stickyBar:     '.nt-sticky-atc',
     stickyBtn:     '.nt-sticky-atc__btn',
-    stickyPrice:   '.nt-sticky-atc__price',
-    stickyVariant: '.nt-sticky-atc__variant',
+    stickyBtnText: '.nt-sticky-atc__btn-text',
+    stickyPrice:   '#nt-sticky-price',
+    stickyPills:   '.nt-sticky-atc__pill',
+    stickySelect:  '#nt-sticky-select',
     variantInput:  '.product-variant-id',
-    // Dawn's variant selector custom element
-    variantSelects: 'variant-selects',
+    variantSelects:'variant-selects, variant-radios',
+    addToCartForm: 'form[data-type="add-to-cart-form"]'
   };
 
   function init() {
-    const bar        = document.querySelector(SELECTORS.stickyBar);
-    const stickyBtn  = document.querySelector(SELECTORS.stickyBtn);
-    const priceEl    = document.querySelector(SELECTORS.stickyPrice);
-    const variantEl  = document.querySelector(SELECTORS.stickyVariant);
+    const bar = document.querySelector(SELECTORS.stickyBar);
+    const stickyBtn = document.querySelector(SELECTORS.stickyBtn);
+    const stickyPrice = document.querySelector(SELECTORS.stickyPrice);
+    const stickyPills = document.querySelectorAll(SELECTORS.stickyPills);
+    const stickySelect = document.querySelector(SELECTORS.stickySelect);
 
     if (!bar || !stickyBtn) return;
 
@@ -39,7 +41,6 @@
           if (entry.isIntersecting) {
             bar.classList.remove('is-visible');
           } else {
-            // Only show if not disabled (not sold out)
             if (!stickyBtn.disabled) {
               bar.classList.add('is-visible');
             }
@@ -48,122 +49,144 @@
       },
       { threshold: 0, rootMargin: '0px' }
     );
-
     observer.observe(mainBtn);
 
-    // ── Sync variant info when Dawn fires variant:change ──
+    // ── Helper to format price ──
+    const formatMoney = (cents) => {
+      // Shopify returns cents, we want DH format. Very basic formatter.
+      if (typeof window.Shopify !== 'undefined' && window.Shopify.formatMoney) {
+         // If Shopify's built-in formatter is loaded
+         return window.Shopify.formatMoney(cents, window.theme?.moneyFormat || '{{amount}} DH');
+      }
+      return (cents / 100).toFixed(2) + ' DH';
+    };
+
+    // ── Helper: Sync state FROM main form TO sticky bar ──
+    const syncFromVariant = (variant) => {
+      // Update Price
+      if (stickyPrice) {
+        stickyPrice.innerHTML = formatMoney(variant.price);
+      }
+      
+      // Update Button State
+      if (variant.available) {
+        stickyBtn.disabled = false;
+        stickyBtn.removeAttribute('data-sold-out');
+        const textSpan = stickyBtn.querySelector(SELECTORS.stickyBtnText);
+        if(textSpan) textSpan.innerText = 'AJOUTER AU PANIER';
+        // Only show bar if currently off-screen
+        if (mainBtn.getBoundingClientRect().top < 0) {
+           bar.classList.add('is-visible');
+        }
+      } else {
+        stickyBtn.disabled = true;
+        stickyBtn.setAttribute('data-sold-out', 'true');
+        const textSpan = stickyBtn.querySelector(SELECTORS.stickyBtnText);
+        if(textSpan) textSpan.innerText = 'ÉPUISÉ';
+        bar.classList.remove('is-visible');
+      }
+
+      // Update Pills/Dropdown UI
+      if (stickyPills.length > 0) {
+        stickyPills.forEach(pill => {
+          pill.classList.toggle('is-active', pill.dataset.variantId == variant.id);
+        });
+      }
+      if (stickySelect) {
+        stickySelect.value = variant.id;
+      }
+    };
+
+    // Listen to Dawn's custom event
     document.addEventListener('variant:change', (event) => {
       const { variant } = event.detail;
-      if (!variant) return;
-
-      syncFromVariant(variant, stickyBtn, priceEl, variantEl);
+      if (variant) syncFromVariant(variant);
     });
 
-    // ── Also listen to Dawn's own PubSub (subscribe to CART events) ──
-    // Fallback: observe the hidden variant input for changes
-    const variantInput = document.querySelector(SELECTORS.variantInput);
-    if (variantInput) {
-      const inputObserver = new MutationObserver(() => {
-        const variantSelectsEl = document.querySelector(SELECTORS.variantSelects);
-        if (variantSelectsEl) {
-          // Get current variant from the script tag Dawn writes
-          const variantData = document.querySelector('[data-selected-variant]');
-          if (variantData) {
-            try {
-              const variant = JSON.parse(variantData.textContent);
-              if (variant) syncFromVariant(variant, stickyBtn, priceEl, variantEl);
-            } catch (e) {}
-          }
+    // ── Helper: Sync state FROM sticky bar TO main form ──
+    const triggerMainFormChange = (variantId) => {
+      // If Dawn uses variant-selects or variant-radios, we have to simulate a click/change on the underlying inputs
+      // Easiest robust way in Dawn OS 2.0 without knowing the exact structure is to change the hidden input and dispatch event
+      const mainVariantSelects = document.querySelector(SELECTORS.variantSelects);
+      
+      if (mainVariantSelects) {
+        // We look for the inputs inside variantSelects that map to the options of this variant.
+        // But since we only have variantId, Dawn's variantSelects doesn't easily let us set variantId directly.
+        // We have to find the specific variant data and set its options.
+        const variantDataEl = mainVariantSelects.querySelector('[type="application/json"]');
+        if (variantDataEl) {
+          try {
+            const variants = JSON.parse(variantDataEl.textContent);
+            const targetVariant = variants.find(v => v.id == variantId);
+            if (targetVariant) {
+              // Now we have targetVariant.options (e.g. ["250g", "Naturel"]). We must click the right labels in main form.
+              const fieldsets = Array.from(mainVariantSelects.querySelectorAll('fieldset, select'));
+              targetVariant.options.forEach((opt, index) => {
+                const group = fieldsets[index];
+                if (group.tagName === 'SELECT') {
+                  group.value = opt;
+                  group.dispatchEvent(new Event('change', { bubbles: true }));
+                } else if (group.tagName === 'FIELDSET') {
+                  const radio = group.querySelector(`input[value="${opt.replace(/"/g, '\\"')}"]`);
+                  if (radio) {
+                    radio.checked = true;
+                    radio.dispatchEvent(new Event('change', { bubbles: true }));
+                  }
+                }
+              });
+            }
+          } catch(e) { console.error('Error parsing variant data', e); }
         }
+      }
+    };
+
+    // Sticky Pills Click
+    if (stickyPills.length > 0) {
+      stickyPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+          if (pill.disabled) return;
+          triggerMainFormChange(pill.dataset.variantId);
+        });
       });
-      inputObserver.observe(variantInput, { attributes: true, attributeFilter: ['value', 'disabled'] });
+    }
+
+    // Sticky Select Change
+    if (stickySelect) {
+      stickySelect.addEventListener('change', (e) => {
+        triggerMainFormChange(e.target.value);
+      });
     }
 
     // ── Sticky button click → submit main product form ──
     stickyBtn.addEventListener('click', () => {
       if (stickyBtn.disabled) return;
-
-      // Find and submit the main product form
-      const form = document.querySelector('form[data-type="add-to-cart-form"]');
+      const form = document.querySelector(SELECTORS.addToCartForm);
       if (!form) return;
 
-      stickyBtn.classList.add('loading');
       stickyBtn.disabled = true;
+      const textSpan = stickyBtn.querySelector(SELECTORS.stickyBtnText);
+      if(textSpan) textSpan.innerText = '...';
 
-      // Use fetch to add to cart (same as Dawn's product-form.js pattern)
-      const variantId = form.querySelector('.product-variant-id')?.value;
-      if (!variantId) {
-        stickyBtn.classList.remove('loading');
-        stickyBtn.disabled = false;
-        return;
+      // Find the main add to cart button and click it to ensure all Dawn logic runs
+      const mainSubmit = form.querySelector('[name="add"]');
+      if (mainSubmit) {
+         mainSubmit.click();
+      } else {
+         form.submit();
       }
-
-      fetch(window.routes.cart_add_url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Requested-With': 'XMLHttpRequest',
-        },
-        body: JSON.stringify({ id: variantId, quantity: 1 }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.status === 422) {
-            console.warn('[NutstreeStickyATC] Erreur panier:', data.description);
-          } else {
-            // Fire Dawn's cart:refresh event to update cart count bubble
-            document.dispatchEvent(new CustomEvent('cart:refresh', { bubbles: true }));
-            // Brief visual feedback
-            const origText = stickyBtn.querySelector('.nt-sticky-atc__btn-text');
-            if (origText) {
-              const prev = origText.textContent;
-              origText.textContent = '✓ Ajouté !';
-              setTimeout(() => { origText.textContent = prev; }, 1800);
-            }
-          }
-        })
-        .catch(console.error)
-        .finally(() => {
-          stickyBtn.classList.remove('loading');
-          stickyBtn.disabled = false;
-        });
+      
+      setTimeout(() => {
+        stickyBtn.disabled = false;
+        if(textSpan) textSpan.innerText = 'AJOUTER AU PANIER';
+      }, 1000);
     });
   }
 
-  function syncFromVariant(variant, btn, priceEl, variantEl) {
-    // Availability
-    const available = variant.available;
-    btn.disabled = !available;
-
-    if (!available) {
-      btn.setAttribute('data-sold-out', '');
-      const textEl = btn.querySelector('.nt-sticky-atc__btn-text');
-      if (textEl) textEl.textContent = window.variantStrings?.soldOut || 'Épuisé';
-    } else {
-      btn.removeAttribute('data-sold-out');
-      const textEl = btn.querySelector('.nt-sticky-atc__btn-text');
-      if (textEl) textEl.textContent = window.variantStrings?.addToCart || 'Ajouter au panier';
-    }
-
-    // Price
-    if (priceEl && variant.price !== undefined) {
-      const price = (variant.price / 100).toFixed(2) + ' MAD';
-      priceEl.textContent = price;
-    }
-
-    // Variant title
-    if (variantEl && variant.title && variant.title !== 'Default Title') {
-      variantEl.textContent = variant.title;
-      variantEl.style.display = '';
-    } else if (variantEl) {
-      variantEl.style.display = 'none';
-    }
-  }
-
-  // Wait for DOM
+  // Init on DOM ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {
     init();
   }
+
 })();

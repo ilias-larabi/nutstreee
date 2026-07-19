@@ -1,138 +1,191 @@
-/**
- * NUTSTREE — Sticky Add to Cart
- * Appears via IntersectionObserver when main ATC button scrolls out of view
- * Variant & price synced with main form via PubSub / events
- * Safe-area-inset-bottom for iPhone notch/home bar
- */
+/* NUTSTREE — Premium Sticky Add to Cart (Or & Cuir) */
 
 .nt-sticky-atc {
   position: fixed;
   bottom: 0;
   left: 0;
-  right: 0;
-  z-index: 500;
+  width: 100%;
+  background: linear-gradient(to right, #D4AF37, #AA7C11);
+  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.15);
+  z-index: 20; /* High enough to be over chat but under popups */
   transform: translateY(100%);
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: transform;
-  pointer-events: none;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 10px 15px;
+  padding-bottom: calc(10px + env(safe-area-inset-bottom));
+  font-family: 'Inter', sans-serif;
+  color: #2C2C2C;
 }
 
 .nt-sticky-atc.is-visible {
   transform: translateY(0);
-  pointer-events: auto;
 }
 
 .nt-sticky-atc__inner {
-  background: #FEFCF8;
-  border-top: 1px solid rgba(59, 79, 42, 0.12);
-  padding: 0.75rem 1.25rem;
-  padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
   display: flex;
   align-items: center;
-  gap: 1rem;
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+  justify-content: space-between;
+  gap: 12px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-/* Product info */
-.nt-sticky-atc__info {
-  flex: 1;
-  min-width: 0;
+.nt-sticky-atc__thumbnail-wrapper {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 6px;
   overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background-color: #fff;
+}
+
+.nt-sticky-atc__thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.nt-sticky-atc__info {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-width: 0;
 }
 
 .nt-sticky-atc__title {
   font-family: 'Playfair Display', serif;
-  font-size: 0.88rem;
-  font-weight: 600;
-  color: #1E1E1E;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #1A1A1A;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  display: block;
-  margin-bottom: 0.15rem;
-}
-
-.nt-sticky-atc__variant {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.78rem;
-  color: #6B6B5C;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: block;
+  line-height: 1.2;
 }
 
 .nt-sticky-atc__price {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: #3B4F2A;
-  white-space: nowrap;
-  flex-shrink: 0;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #2C2C2C;
 }
 
-/* CTA Button */
+.nt-sticky-atc__variants {
+  display: flex;
+  align-items: center;
+}
+
+.nt-sticky-atc__pills {
+  display: flex;
+  gap: 6px;
+}
+
+.nt-sticky-atc__pill {
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #1A1A1A;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.nt-sticky-atc__pill.is-active {
+  background-color: #2C2C2C;
+  color: #D4AF37;
+  border-color: #2C2C2C;
+}
+
+.nt-sticky-atc__pill:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+.nt-sticky-atc__select {
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1A1A1A;
+  outline: none;
+  cursor: pointer;
+}
+
 .nt-sticky-atc__btn {
-  display: inline-flex;
+  background-color: #3A2315; /* Cuir marron foncé */
+  color: #F5F0E6;
+  border: 2px solid #E5C158; /* Bordure dorée */
+  border-radius: 30px;
+  padding: 0 16px;
+  min-height: 44px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.4rem;
-  height: 48px;
-  padding: 0 1.25rem;
-  background: #C0622A;
-  color: #ffffff;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.9rem;
-  font-weight: 700;
-  border: none;
-  border-radius: 100px;
   cursor: pointer;
   white-space: nowrap;
+  transition: all 0.2s ease;
   flex-shrink: 0;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  box-shadow: 0 2px 8px rgba(58, 35, 21, 0.4);
 }
 
 .nt-sticky-atc__btn:hover {
+  background-color: #2C1A10;
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(192, 98, 42, 0.35);
 }
 
 .nt-sticky-atc__btn:active {
-  transform: translateY(0);
-  box-shadow: none;
+  transform: translateY(1px);
 }
 
-.nt-sticky-atc__btn:disabled,
-.nt-sticky-atc__btn[data-sold-out] {
-  background: #9E9E9E;
+.nt-sticky-atc__btn:disabled {
+  background-color: #8C8C8C;
+  border-color: #8C8C8C;
   cursor: not-allowed;
-  opacity: 0.7;
-  transform: none;
   box-shadow: none;
+  transform: none;
 }
 
-.nt-sticky-atc__btn svg {
-  width: 16px;
-  height: 16px;
-  flex-shrink: 0;
-}
-
-/* Loading state */
-.nt-sticky-atc__btn.loading {
-  opacity: 0.7;
-  pointer-events: none;
-}
-
-/* Desktop: wider layout */
-@media (min-width: 750px) {
+/* Mobile optimizations */
+@media screen and (max-width: 767px) {
   .nt-sticky-atc__inner {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 0.75rem 2rem;
-    padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
+    flex-wrap: wrap;
+    align-items: center;
   }
-
+  
+  .nt-sticky-atc__info {
+    order: 1;
+    width: calc(100% - 60px); /* Adjust for thumbnail */
+  }
+  
+  .nt-sticky-atc__thumbnail-wrapper {
+    order: 0;
+  }
+  
+  .nt-sticky-atc__variants {
+    order: 2;
+    width: 100%;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    justify-content: center;
+  }
+  
   .nt-sticky-atc__btn {
-    padding: 0 2rem;
+    order: 3;
+    width: 100%;
+    min-height: 48px; /* Larger target on mobile */
+  }
+  
+  .nt-sticky-atc__title {
+    font-size: 1rem;
   }
 }

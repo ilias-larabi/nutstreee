@@ -1,7 +1,6 @@
 {% comment %}
-  NUTSTREE — Sticky Add to Cart Snippet
+  NUTSTREE — Premium Sticky Add to Cart Snippet (Or & Cuir)
   Injecté depuis theme.liquid uniquement sur les pages produit.
-  Conforme OS 2.0 : pas de HTML en dur dans les layouts.
 {% endcomment %}
 
 {{- 'sticky-add-to-cart.css' | asset_url | stylesheet_tag -}}
@@ -9,18 +8,58 @@
 <div class="nt-sticky-atc" aria-live="polite" aria-label="{{ 'products.product.add_to_cart' | t }}" hidden>
   <div class="nt-sticky-atc__inner">
 
+    {%- if product.featured_image -%}
+      <div class="nt-sticky-atc__thumbnail-wrapper">
+        <img 
+          src="{{ product.featured_image | image_url: width: 100 }}" 
+          alt="{{ product.title | escape }}" 
+          class="nt-sticky-atc__thumbnail"
+          loading="lazy"
+          width="50"
+          height="50"
+        >
+      </div>
+    {%- endif -%}
+
     <div class="nt-sticky-atc__info">
       <span class="nt-sticky-atc__title">{{ product.title | escape }}</span>
-      {%- unless product.has_only_default_variant -%}
-        <span class="nt-sticky-atc__variant">
-          {{- product.selected_or_first_available_variant.title | escape -}}
-        </span>
-      {%- endunless -%}
+      <span class="nt-sticky-atc__price" id="nt-sticky-price">
+        {{- product.selected_or_first_available_variant.price | money -}}
+      </span>
     </div>
 
-    <span class="nt-sticky-atc__price">
-      {{- product.selected_or_first_available_variant.price | money -}}
-    </span>
+    {%- unless product.has_only_default_variant -%}
+      <div class="nt-sticky-atc__variants">
+        {%- if product.variants.size <= 3 -%}
+          <div class="nt-sticky-atc__pills">
+            {%- for variant in product.variants -%}
+              <button 
+                type="button" 
+                class="nt-sticky-atc__pill {% if variant.id == product.selected_or_first_available_variant.id %}is-active{% endif %}"
+                data-variant-id="{{ variant.id }}"
+                {% unless variant.available %}disabled{% endunless %}
+              >
+                {{ variant.title | escape }}
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- else -%}
+          <div class="nt-sticky-atc__dropdown">
+            <select class="nt-sticky-atc__select" id="nt-sticky-select">
+              {%- for variant in product.variants -%}
+                <option 
+                  value="{{ variant.id }}" 
+                  {% if variant.id == product.selected_or_first_available_variant.id %}selected="selected"{% endif %}
+                  {% unless variant.available %}disabled="disabled"{% endunless %}
+                >
+                  {{ variant.title }}
+                </option>
+              {%- endfor -%}
+            </select>
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endunless -%}
 
     <button
       class="nt-sticky-atc__btn"
@@ -32,15 +71,11 @@
         data-sold-out
       {% endunless %}
     >
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
-        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-      </svg>
       <span class="nt-sticky-atc__btn-text">
         {%- if product.selected_or_first_available_variant.available -%}
-          {{ 'products.product.add_to_cart' | t }}
+          AJOUTER AU PANIER
         {%- else -%}
-          {{ 'products.product.sold_out' | t }}
+          ÉPUISÉ
         {%- endif -%}
       </span>
     </button>
