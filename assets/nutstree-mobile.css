@@ -116,3 +116,44 @@
   overflow-wrap: break-word;
   min-width: 0;
 }
+
+/* ============================================================
+   Phase 1C: Product Page CRO & Storytelling
+   ============================================================ */
+
+/* Accordions (Origine, Conservation) */
+.product__accordion .accordion__title {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  color: #3B4F2A;
+}
+
+.product__accordion details > summary {
+  padding: 1.5rem 0;
+  border-bottom: 1px solid rgba(59, 79, 42, 0.1);
+}
+
+.product__accordion .accordion__content {
+  font-family: 'Inter', sans-serif;
+  color: #6B6B5C;
+  line-height: 1.6;
+}
+
+/* Rating Stars */
+.rating-wrapper {
+  margin-bottom: 1rem;
+}
+
+.rating-star {
+  --letter-spacing: 0.1;
+  --font-size: 1.5;
+  color: #C5A55A; /* Nutstree Gold */
+}
+
+/* Related Products header */
+.related-products__heading {
+  font-family: 'Playfair Display', serif;
+  color: #3B4F2A;
+  text-align: center;
+  margin-bottom: 2rem;
+}

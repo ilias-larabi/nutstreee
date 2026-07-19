@@ -242,7 +242,37 @@ details[open].menu-opening > .menu-drawer__submenu {
   }
 }
 
-/* Nutstree Premium Mobile Menu Fix */
-.menu-drawer { background-color: #F5F0E6 !important; color: #2C2C2C !important; }
-.menu-drawer__menu-item, .menu-drawer__close-button { color: #2C2C2C !important; font-weight: 500; }
-.menu-drawer__menu-item:hover { color: #4A5D3A !important; }
+/* Nutstree Custom */
+#menu-drawer {
+  background-color: #F5F0E6 !important;
+}
+
+/* Nutstree Custom Top-Level Drawer Styles */
+.menu-drawer__menu > li > .menu-drawer__menu-item {
+  font-family: 'Playfair Display', serif !important;
+  font-size: 1.4rem !important;
+  font-weight: 700 !important;
+  color: #3B4F2A !important;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(59, 79, 42, 0.1);
+}
+
+.menu-drawer__menu > li > .menu-drawer__menu-item:hover,
+.menu-drawer__menu > li > .menu-drawer__menu-item:focus {
+  color: #C0622A !important;
+  background-color: transparent;
+}
+
+.menu-drawer__submenu .menu-drawer__menu-item,
+.menu-drawer__close-button {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 1.1rem !important;
+  color: #1E1E1E !important;
+  font-weight: 500;
+}
+
+.menu-drawer__submenu .menu-drawer__menu-item:hover,
+.menu-drawer__close-button:hover {
+  color: #4A5D3A !important;
+}

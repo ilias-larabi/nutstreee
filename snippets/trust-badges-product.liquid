@@ -1,0 +1,76 @@
+{% comment %}
+  Nutstree — Product Page Trust Badges
+  Displayed below the Add to Cart button to increase conversion.
+{% endcomment %}
+
+<div class="nt-trust-badges">
+  <div class="nt-trust-badge">
+    <div class="nt-trust-badge__icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+    </div>
+    <span class="nt-trust-badge__text">Paiement 100% sécurisé</span>
+  </div>
+  <div class="nt-trust-badge">
+    <div class="nt-trust-badge__icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="1" y="3" width="15" height="13"/>
+        <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+        <circle cx="5.5" cy="18.5" r="2.5"/>
+        <circle cx="18.5" cy="18.5" r="2.5"/>
+      </svg>
+    </div>
+    <span class="nt-trust-badge__text">Livraison rapide</span>
+  </div>
+  <div class="nt-trust-badge">
+    <div class="nt-trust-badge__icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+      </svg>
+    </div>
+    <span class="nt-trust-badge__text">Satisfait ou remboursé</span>
+  </div>
+</div>
+
+{% style %}
+  .nt-trust-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(59, 79, 42, 0.1);
+    justify-content: center;
+  }
+  .nt-trust-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+    min-width: 80px;
+    text-align: center;
+  }
+  .nt-trust-badge__icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #3B4F2A; /* Nutstree Olive Green */
+    background-color: rgba(59, 79, 42, 0.05);
+    border-radius: 50%;
+    padding: 6px;
+  }
+  .nt-trust-badge__icon svg {
+    width: 100%;
+    height: 100%;
+  }
+  .nt-trust-badge__text {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    color: #6B6B5C;
+    line-height: 1.2;
+  }
+{% endstyle %}

@@ -35,7 +35,19 @@
                   role="list"
                 >
                   {%- for childlink in link.links -%}
-                    <li>
+                    <li class="mega-menu__item-visual">
+                      {%- if childlink.type == 'collection_link' and childlink.object.image != blank -%}
+                        <a href="{{ childlink.url }}" class="mega-menu__image-wrapper" tabindex="-1">
+                          <img
+                            src="{{ childlink.object.image | image_url: width: 300 }}"
+                            alt="{{ childlink.object.image.alt | escape }}"
+                            loading="lazy"
+                            width="150"
+                            height="150"
+                            class="mega-menu__image"
+                          >
+                        </a>
+                      {%- endif -%}
                       <a
                         id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
                         href="{{ childlink.url }}"

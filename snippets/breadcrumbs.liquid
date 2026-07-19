@@ -1,0 +1,140 @@
+{%- unless template == 'index' or template == 'cart' or template == 'list-collections' or template == '404' -%}
+  {%- assign t = template | split: '.' | first -%}
+  
+  <nav class="nt-breadcrumbs page-width" role="navigation" aria-label="breadcrumbs">
+    <ol class="nt-breadcrumbs__list">
+      <li class="nt-breadcrumbs__item">
+        <a class="nt-breadcrumbs__link" href="{{ routes.root_url }}">{{ 'general.continue_shopping' | t | default: 'Accueil' }}</a>
+      </li>
+      
+      {%- case t -%}
+        {%- when 'page' -%}
+          <li class="nt-breadcrumbs__item">
+            <span class="nt-breadcrumbs__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+            </span>
+            <a class="nt-breadcrumbs__link" href="{{ page.url }}" aria-current="page">{{ page.title }}</a>
+          </li>
+          
+        {%- when 'product' -%}
+          {%- if collection.url -%}
+            <li class="nt-breadcrumbs__item">
+              <span class="nt-breadcrumbs__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+              </span>
+              <a class="nt-breadcrumbs__link" href="{{ collection.url }}">{{ collection.title }}</a>
+            </li>
+          {%- endif -%}
+          <li class="nt-breadcrumbs__item">
+            <span class="nt-breadcrumbs__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+            </span>
+            <a class="nt-breadcrumbs__link nt-breadcrumbs__link--current" href="{{ product.url }}" aria-current="page">{{ product.title }}</a>
+          </li>
+          
+        {%- when 'collection' and collection.handle -%}
+          <li class="nt-breadcrumbs__item">
+            <span class="nt-breadcrumbs__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+            </span>
+            <a class="nt-breadcrumbs__link nt-breadcrumbs__link--current" href="{{ collection.url }}" aria-current="page">{{ collection.title }}</a>
+          </li>
+          
+        {%- when 'blog' -%}
+          <li class="nt-breadcrumbs__item">
+            <span class="nt-breadcrumbs__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+            </span>
+            <a class="nt-breadcrumbs__link" href="{{ blog.url }}" aria-current="page">{{ blog.title }}</a>
+          </li>
+          
+        {%- when 'article' -%}
+          <li class="nt-breadcrumbs__item">
+            <span class="nt-breadcrumbs__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+            </span>
+            <a class="nt-breadcrumbs__link" href="{{ blog.url }}">{{ blog.title }}</a>
+          </li>
+          <li class="nt-breadcrumbs__item">
+            <span class="nt-breadcrumbs__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+            </span>
+            <a class="nt-breadcrumbs__link nt-breadcrumbs__link--current" href="{{ article.url }}" aria-current="page">{{ article.title }}</a>
+          </li>
+          
+        {%- else -%}
+          <li class="nt-breadcrumbs__item">
+            <span class="nt-breadcrumbs__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+            </span>
+            <a class="nt-breadcrumbs__link" href="{{ request.path }}" aria-current="page">{{ page_title }}</a>
+          </li>
+      {%- endcase -%}
+    </ol>
+  </nav>
+
+  {% style %}
+    .nt-breadcrumbs {
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .nt-breadcrumbs__list {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .nt-breadcrumbs__item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .nt-breadcrumbs__link {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      color: rgba(var(--color-foreground), 0.6);
+      text-decoration: none;
+      transition: color 0.2s ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 150px; /* Handles long bidi titles gracefully */
+      display: inline-block;
+      unicode-bidi: isolate;
+    }
+    .nt-breadcrumbs__link:hover {
+      color: rgb(var(--color-foreground));
+    }
+    .nt-breadcrumbs__link--current {
+      color: #3B4F2A; /* Nutstree Olive Green */
+      font-weight: 600;
+      max-width: 200px;
+    }
+    .nt-breadcrumbs__icon {
+      display: flex;
+      align-items: center;
+      color: rgba(var(--color-foreground), 0.3);
+    }
+    .nt-breadcrumbs__icon svg {
+      width: 12px;
+      height: 12px;
+    }
+    
+    @media screen and (min-width: 750px) {
+      .nt-breadcrumbs {
+        margin-top: 2.5rem;
+        margin-bottom: 1rem;
+      }
+      .nt-breadcrumbs__link {
+        font-size: 0.8rem;
+        max-width: 300px;
+      }
+      .nt-breadcrumbs__link--current {
+        max-width: 400px;
+      }
+    }
+  {% endstyle %}
+{%- endunless -%}
