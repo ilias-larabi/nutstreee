@@ -72,18 +72,11 @@
     },
     "premium_categories": {
       "type": "premium-collection-list",
-      "blocks": {
-        "block_1": { "type": "category", "settings": { "title": "Fruits secs",       "icon": "leaf",       "gradient_class": "nt-cat-gradient--olive" } },
-        "block_2": { "type": "category", "settings": { "title": "Miel",               "icon": "honey",      "gradient_class": "nt-cat-gradient--amber" } },
-        "block_3": { "type": "category", "settings": { "title": "Chocolat",           "icon": "chocolate",  "gradient_class": "nt-cat-gradient--brown" } },
-        "block_4": { "type": "category", "settings": { "title": "Fruits confits",     "icon": "fruit",      "gradient_class": "nt-cat-gradient--terra" } },
-        "block_5": { "type": "category", "settings": { "title": "Épices",              "icon": "spice",      "gradient_class": "nt-cat-gradient--warm" } },
-        "block_6": { "type": "category", "settings": { "title": "Coffrets cadeaux",  "icon": "gift",       "gradient_class": "nt-cat-gradient--dark" } }
-      },
-      "block_order": ["block_1", "block_2", "block_3", "block_4", "block_5", "block_6"],
       "settings": {
         "title": "Nos univers",
         "columns_desktop": 3,
+        "max_collections": 12,
+        "show_count": true,
         "show_view_all": true,
         "btn_text": "Voir toutes les catégories",
         "color_primary": "#3B4F2A",

@@ -1,7 +1,13 @@
 {% comment %}
-  NUTSTREE — Grille Catégories Premium
-  Chaque catégorie a un dégradé de couleur distinct et une icône SVG thématique.
-  Fallback visuel coloré même sans image de collection.
+  NUTSTREE — Grille Catégories Premium (Automatique)
+  Lit TOUTES les collections Shopify automatiquement.
+  Dès qu'une collection est ajoutée dans Admin → Produits → Collections,
+  elle apparaît ici sans aucune configuration supplémentaire.
+  
+  Paramètres:
+  - Exclure les collections "all" et "frontpage" (collections par défaut Dawn)
+  - Limite configurable (default: 12)
+  - Dégradés et icônes cycliques automatiques
 {% endcomment %}
 
 {%- style -%}
@@ -42,6 +48,7 @@
     font-weight: 600;
     color: #C0622A;
     text-decoration: none;
+    white-space: nowrap;
   }
 
   .nt-cats__grid {
@@ -53,7 +60,14 @@
     margin: 0;
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 600px) {
+    .nt-cats__grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+  }
+
+  @media (min-width: 990px) {
     .nt-cats__grid {
       grid-template-columns: repeat({{ section.settings.columns_desktop | default: 3 }}, 1fr);
       gap: 1.25rem;
@@ -65,7 +79,7 @@
     flex-direction: column;
     justify-content: flex-end;
     border-radius: 16px;
-    height: 106px;
+    height: 110px;
     position: relative;
     overflow: hidden;
     text-decoration: none;
@@ -75,7 +89,7 @@
 
   @media (min-width: 768px) {
     .nt-cat-card {
-      height: 140px;
+      height: 150px;
     }
   }
 
@@ -84,16 +98,17 @@
     box-shadow: 0 18px 30px -14px rgba(0,0,0,.3);
   }
 
-  /* Overlay for text readability */
+  /* Overlay gradient for text readability */
   .nt-cat-card::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(200deg, transparent 30%, rgba(0,0,0,.35));
+    background: linear-gradient(200deg, transparent 25%, rgba(0,0,0,.42));
     pointer-events: none;
+    z-index: 1;
   }
 
-  /* Background image (when present) */
+  /* Real collection image */
   .nt-cat-card__img {
     position: absolute;
     inset: 0;
@@ -101,26 +116,35 @@
     height: 100%;
     object-fit: cover;
     transition: transform 0.5s ease;
+    z-index: 0;
   }
 
   .nt-cat-card:hover .nt-cat-card__img {
     transform: scale(1.08);
   }
 
-  /* Gradient fallback (always shown under image) */
-  .nt-cat-card__gradient {
+  /* Gradient background (behind image, always visible as fallback) */
+  .nt-cat-card__bg {
     position: absolute;
     inset: 0;
-    border-radius: inherit;
+    z-index: 0;
   }
+
+  /* The 6 brand gradient palettes — cycle automatically */
+  .nt-grad-0 { background: linear-gradient(135deg, #6B8A4A, #3B4F2A); }
+  .nt-grad-1 { background: linear-gradient(135deg, #D9A94A, #C5A55A); }
+  .nt-grad-2 { background: linear-gradient(135deg, #8B5A32, #5C3521); }
+  .nt-grad-3 { background: linear-gradient(135deg, #D08055, #C0622A); }
+  .nt-grad-4 { background: linear-gradient(135deg, #A68A55, #7A6339); }
+  .nt-grad-5 { background: linear-gradient(135deg, #8B3E18, #5C2A0F); }
 
   .nt-cat-card__icon {
     position: relative;
     z-index: 2;
-    color: rgba(255,255,255,.9);
-    width: 22px;
-    height: 22px;
-    margin-bottom: 6px;
+    color: rgba(255,255,255,.88);
+    width: 20px;
+    height: 20px;
+    margin-bottom: 5px;
     flex-shrink: 0;
   }
 
@@ -130,18 +154,36 @@
     color: #ffffff;
     font-family: 'Inter', sans-serif;
     font-weight: 600;
-    font-size: 13.5px;
+    font-size: 13px;
     line-height: 1.3;
-    text-shadow: 0 1px 3px rgba(0,0,0,.2);
+    text-shadow: 0 1px 4px rgba(0,0,0,.25);
   }
 
-  /* ── Dégradés par défaut (identité visuelle mockup) ── */
-  .nt-cat-gradient--olive   { background: linear-gradient(135deg, #6B8A4A, #3B4F2A); }
-  .nt-cat-gradient--amber   { background: linear-gradient(135deg, #D9A94A, #C5A55A); }
-  .nt-cat-gradient--brown   { background: linear-gradient(135deg, #8B5A32, #5C3521); }
-  .nt-cat-gradient--terra   { background: linear-gradient(135deg, #D08055, #C0622A); }
-  .nt-cat-gradient--warm    { background: linear-gradient(135deg, #A68A55, #7A6339); }
-  .nt-cat-gradient--dark    { background: linear-gradient(135deg, #8B3E18, #5C2A0F); }
+  /* Product count badge */
+  .nt-cat-card__count {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+    background: rgba(255,255,255,.2);
+    backdrop-filter: blur(4px);
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 7px;
+    border-radius: 20px;
+  }
+
+  /* Empty state */
+  .nt-cats__empty {
+    text-align: center;
+    padding: 3rem;
+    color: var(--c-text);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    opacity: 0.6;
+  }
 
   .nt-cats__footer {
     text-align: center;
@@ -163,6 +205,7 @@
     font-weight: 600;
     text-decoration: none;
     transition: all 0.25s ease;
+    cursor: pointer;
   }
 
   .nt-cats__btn:hover {
@@ -173,12 +216,19 @@
   }
 {%- endstyle -%}
 
+{%- comment -%}
+  Icônes thématiques : on essaie de deviner l'icône depuis le handle de la collection.
+  Si aucune correspondance, on cycle sur 6 icônes génériques.
+{%- endcomment -%}
+
 {%- liquid
-  assign gradient_classes = 'nt-cat-gradient--olive,nt-cat-gradient--amber,nt-cat-gradient--brown,nt-cat-gradient--terra,nt-cat-gradient--warm,nt-cat-gradient--dark' | split: ','
+  assign icon_handles = 'fruit,sec,olive,amande,pistache,noix,cajou,noisette|miel,honey,api|chocolat,choco,cacao|confit,cerise,abricot|epice,cannelle,cumin,safran,curcuma|cadeau,coffret,gift,plateau|datte,medjool,ajwa,sukkari|amlou,the,tisane' | split: '|'
+  assign icon_names   = 'leaf|honey|chocolate|fruit|spice|gift|dates|leaf' | split: '|'
 -%}
 
 <div class="nt-cats-{{ section.id }}">
   <div class="nt-cats__inner">
+
     {%- if section.settings.title != blank -%}
       <div class="nt-cats__header">
         <h2 class="nt-cats__title">{{ section.settings.title | escape }}</h2>
@@ -188,80 +238,134 @@
       </div>
     {%- endif -%}
 
-    <ul class="nt-cats__grid">
-      {%- for block in section.blocks -%}
-        {%- assign collection = collections[block.settings.collection] -%}
-        {%- assign image       = block.settings.image | default: collection.image | default: collection.products.first.featured_image -%}
-        {%- assign title       = block.settings.title | default: collection.title | default: 'Catégorie' -%}
-        {%- assign link        = collection.url | default: '/collections' -%}
-        {%- assign grad_index  = forloop.index0 | modulo: 6 -%}
-        {%- assign default_grad = gradient_classes[grad_index] -%}
-        {%- assign gradient_class = block.settings.gradient_class | default: default_grad -%}
-        {%- assign icon_id     = block.settings.icon | default: 'leaf' -%}
+    {%- comment -%} Collect real collections, excluding defaults {%- endcomment -%}
+    {%- liquid
+      assign display_limit = section.settings.max_collections | default: 12
+      assign shown = 0
+      assign col_list = ''
+    -%}
 
-        <li {{ block.shopify_attributes }}>
-          <a href="{{ link }}" class="nt-cat-card">
+    {%- comment -%} Build list of valid collections first {%- endcomment -%}
+    {%- assign valid_collections = '' -%}
+    {%- for coll in collections -%}
+      {%- if coll.handle == 'all' or coll.handle == 'frontpage' -%}
+        {%- continue -%}
+      {%- endif -%}
+      {%- if shown < display_limit -%}
+        {%- assign shown = shown | plus: 1 -%}
+        {%- unless forloop.first -%}{%- endunless -%}
+      {%- endif -%}
+    {%- endfor -%}
 
-            {%- comment -%}— Gradient background (always present, behind image) —{%- endcomment -%}
-            <div class="nt-cat-card__gradient {{ gradient_class }}"></div>
+    {%- if shown == 0 -%}
+      <p class="nt-cats__empty">Aucune collection trouvée — créez vos collections dans <strong>Admin → Produits → Collections</strong>.</p>
+    {%- else -%}
+      <ul class="nt-cats__grid">
+        {%- assign loop_index = 0 -%}
+        {%- for coll in collections -%}
+          {%- if coll.handle == 'all' or coll.handle == 'frontpage' -%}
+            {%- continue -%}
+          {%- endif -%}
+          {%- if loop_index >= display_limit -%}
+            {%- break -%}
+          {%- endif -%}
 
-            {%- comment -%}— Real image when available —{%- endcomment -%}
-            {%- if image != blank -%}
-              <img
-                src="{{ image | image_url: width: 800 }}"
-                alt="{{ title | escape }}"
-                class="nt-cat-card__img"
-                loading="lazy"
-                width="800"
-                height="400"
-              >
-            {%- endif -%}
+          {%- comment -%} Auto gradient (cycles 0-5) {%- endcomment -%}
+          {%- assign grad_index = loop_index | modulo: 6 -%}
 
-            {%- comment -%}— Thematic SVG icon —{%- endcomment -%}
-            <div class="nt-cat-card__icon" aria-hidden="true">
-              {%- case icon_id -%}
-                {%- when 'leaf' -%}
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8 6 6 9 6 13a6 6 0 0012 0c0-4-2-7-6-11z"/><path d="M12 22v-9"/></svg>
-                {%- when 'honey' -%}
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 5h6l-4 4 2 6-7-4-7 4 2-6L3 7h6z"/><path d="M12 11v4"/></svg>
-                {%- when 'chocolate' -%}
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M9 5v14M15 5v14"/></svg>
-                {%- when 'fruit' -%}
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="7"/><path d="M12 6V3m-3 3c0-1.7 1.3-3 3-3s3 1.3 3 3"/></svg>
-                {%- when 'spice' -%}
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v10M8 7l4-4 4 4M6 13h12l-1.5 8h-9z"/></svg>
-                {%- when 'gift' -%}
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v9H4v-9M2 7h20v5H2zM12 7V3M12 7c-2 0-3.5-2-2-4 2-1 2.5 1.5 2 4zM12 7c2 0 3.5-2 2-4-2-1-2.5 1.5-2 4z"/></svg>
-                {%- when 'dates' -%}
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="14" rx="5" ry="7"/><path d="M12 7V3"/><path d="M9 5c0 0 1-2 3-2s3 2 3 2"/></svg>
-                {%- when 'nuts' -%}
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3C7 3 4 7 4 12s3 9 8 9 8-4 8-9-3-9-8-9z"/><path d="M12 8v4l3 2"/></svg>
-                {%- else -%}
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8 6 6 9 6 13a6 6 0 0012 0c0-4-2-7-6-11z"/></svg>
-              {%- endcase -%}
-            </div>
+          {%- comment -%} Auto icon guess from handle {%- endcomment -%}
+          {%- assign icon_id = 'leaf' -%}
+          {%- for pattern_group in icon_handles -%}
+            {%- assign patterns = pattern_group | split: ',' -%}
+            {%- for pat in patterns -%}
+              {%- if coll.handle contains pat -%}
+                {%- assign icon_id = icon_names[forloop.parentloop.index0] -%}
+                {%- break -%}
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endfor -%}
 
-            <span class="nt-cat-card__name">{{ title }}</span>
+          <li>
+            <a href="{{ coll.url }}" class="nt-cat-card">
 
-          </a>
-        </li>
-      {%- endfor -%}
-    </ul>
+              {%- comment -%} Gradient fallback {%- endcomment -%}
+              <div class="nt-cat-card__bg nt-grad-{{ grad_index }}"></div>
+
+              {%- comment -%} Real collection image {%- endcomment -%}
+              {%- if coll.image -%}
+                <img
+                  src="{{ coll.image | image_url: width: 600 }}"
+                  alt="{{ coll.title | escape }}"
+                  class="nt-cat-card__img"
+                  loading="lazy"
+                  width="600"
+                  height="300"
+                >
+              {%- elsif coll.products.first.featured_image -%}
+                <img
+                  src="{{ coll.products.first.featured_image | image_url: width: 600 }}"
+                  alt="{{ coll.title | escape }}"
+                  class="nt-cat-card__img"
+                  loading="lazy"
+                  width="600"
+                  height="300"
+                >
+              {%- endif -%}
+
+              {%- comment -%} Product count badge {%- endcomment -%}
+              {%- if section.settings.show_count and coll.products_count > 0 -%}
+                <div class="nt-cat-card__count">{{ coll.products_count }} produits</div>
+              {%- endif -%}
+
+              {%- comment -%} Thematic SVG icon {%- endcomment -%}
+              <div class="nt-cat-card__icon" aria-hidden="true">
+                {%- case icon_id -%}
+                  {%- when 'honey' -%}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10c4-4 12-4 16 0M6 14c3-3 9-3 12 0M9 18c1.5-1.5 4.5-1.5 6 0"/></svg>
+                  {%- when 'chocolate' -%}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M9 5v14M15 5v14"/></svg>
+                  {%- when 'fruit' -%}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="7"/><path d="M12 6V3m-3 3c0-1.7 1.3-3 3-3s3 1.3 3 3"/></svg>
+                  {%- when 'spice' -%}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v10M8 7l4-4 4 4M6 13h12l-1.5 8h-9z"/></svg>
+                  {%- when 'gift' -%}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v9H4v-9M2 7h20v5H2zM12 7V3M12 7c-2 0-3.5-2-2-4 2-1 2.5 1.5 2 4zM12 7c2 0 3.5-2 2-4-2-1-2.5 1.5-2 4z"/></svg>
+                  {%- when 'dates' -%}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="14" rx="5" ry="7"/><path d="M12 7V3M9 5c0 0 1-2 3-2s3 2 3 2"/></svg>
+                  {%- else -%}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8 6 6 9 6 13a6 6 0 0012 0c0-4-2-7-6-11z"/><path d="M12 22v-9"/></svg>
+                {%- endcase -%}
+              </div>
+
+              <span class="nt-cat-card__name">{{ coll.title }}</span>
+
+            </a>
+          </li>
+
+          {%- assign loop_index = loop_index | plus: 1 -%}
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
 
     {%- if section.settings.show_view_all and section.settings.btn_text != blank -%}
       <div class="nt-cats__footer">
         <a href="/collections" class="nt-cats__btn">{{ section.settings.btn_text | escape }}</a>
       </div>
     {%- endif -%}
+
   </div>
 </div>
 
 {% schema %}
 {
-  "name": "Catégories Premium",
+  "name": "Catégories (Auto)",
   "tag": "section",
   "class": "section",
   "settings": [
+    {
+      "type": "paragraph",
+      "content": "✅ Cette section affiche automatiquement toutes vos collections Shopify. Ajoutez une collection dans Admin → Produits → Collections et elle apparaît ici instantanément."
+    },
     {
       "type": "text",
       "id": "title",
@@ -270,23 +374,38 @@
     },
     {
       "type": "range",
+      "id": "max_collections",
+      "min": 2,
+      "max": 24,
+      "step": 1,
+      "default": 12,
+      "label": "Nombre maximum de catégories affichées"
+    },
+    {
+      "type": "range",
       "id": "columns_desktop",
       "min": 2,
-      "max": 5,
+      "max": 6,
       "step": 1,
       "default": 3,
       "label": "Colonnes sur ordinateur"
     },
     {
       "type": "checkbox",
+      "id": "show_count",
+      "label": "Afficher le nombre de produits par catégorie",
+      "default": true
+    },
+    {
+      "type": "checkbox",
       "id": "show_view_all",
-      "default": true,
-      "label": "Afficher le lien 'Tout voir'"
+      "label": "Afficher le bouton 'Tout voir'",
+      "default": true
     },
     {
       "type": "text",
       "id": "btn_text",
-      "label": "Texte du bouton du bas",
+      "label": "Texte du bouton",
       "default": "Voir toutes les catégories"
     },
     {
@@ -312,112 +431,9 @@
       "default": "#2C2C2C"
     }
   ],
-  "blocks": [
-    {
-      "type": "category",
-      "name": "Catégorie",
-      "settings": [
-        {
-          "type": "collection",
-          "id": "collection",
-          "label": "Collection Shopify"
-        },
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Titre (optionnel — remplace le nom de la collection)"
-        },
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Image (optionnel — remplace l'image de la collection)"
-        },
-        {
-          "type": "select",
-          "id": "icon",
-          "label": "Icône thématique",
-          "default": "leaf",
-          "options": [
-            { "value": "leaf",       "label": "🌿 Feuille (Fruits secs)" },
-            { "value": "honey",      "label": "🍯 Miel" },
-            { "value": "chocolate",  "label": "🍫 Chocolat" },
-            { "value": "fruit",      "label": "🍊 Fruit (Fruits confits)" },
-            { "value": "spice",      "label": "🌶 Épices" },
-            { "value": "gift",       "label": "🎁 Coffret cadeau" },
-            { "value": "dates",      "label": "🌴 Dattes" },
-            { "value": "nuts",       "label": "🥜 Oléagineux" }
-          ]
-        },
-        {
-          "type": "select",
-          "id": "gradient_class",
-          "label": "Couleur de fond (dégradé)",
-          "default": "nt-cat-gradient--olive",
-          "options": [
-            { "value": "nt-cat-gradient--olive",  "label": "🟢 Vert olive (Fruits secs)" },
-            { "value": "nt-cat-gradient--amber",  "label": "🟡 Ambré (Miel)" },
-            { "value": "nt-cat-gradient--brown",  "label": "🟤 Brun (Chocolat)" },
-            { "value": "nt-cat-gradient--terra",  "label": "🔴 Terracotta (Fruits confits)" },
-            { "value": "nt-cat-gradient--warm",   "label": "🟠 Chaud (Épices)" },
-            { "value": "nt-cat-gradient--dark",   "label": "⬛ Sombre (Coffrets)" }
-          ]
-        }
-      ]
-    }
-  ],
   "presets": [
     {
-      "name": "Catégories Premium",
-      "blocks": [
-        {
-          "type": "category",
-          "settings": {
-            "title": "Fruits secs",
-            "icon": "leaf",
-            "gradient_class": "nt-cat-gradient--olive"
-          }
-        },
-        {
-          "type": "category",
-          "settings": {
-            "title": "Miel",
-            "icon": "honey",
-            "gradient_class": "nt-cat-gradient--amber"
-          }
-        },
-        {
-          "type": "category",
-          "settings": {
-            "title": "Chocolat",
-            "icon": "chocolate",
-            "gradient_class": "nt-cat-gradient--brown"
-          }
-        },
-        {
-          "type": "category",
-          "settings": {
-            "title": "Fruits confits",
-            "icon": "fruit",
-            "gradient_class": "nt-cat-gradient--terra"
-          }
-        },
-        {
-          "type": "category",
-          "settings": {
-            "title": "Épices",
-            "icon": "spice",
-            "gradient_class": "nt-cat-gradient--warm"
-          }
-        },
-        {
-          "type": "category",
-          "settings": {
-            "title": "Coffrets cadeaux",
-            "icon": "gift",
-            "gradient_class": "nt-cat-gradient--dark"
-          }
-        }
-      ]
+      "name": "Catégories (Auto)"
     }
   ]
 }
