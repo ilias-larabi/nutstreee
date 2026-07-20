@@ -91,27 +91,30 @@
           "type": "review",
           "settings": {
             "rating": 5,
-            "text": "Produits de qualité exceptionnelle ! Les pistaches sont fraîches, bien torréfiées et très savoureuses. Livraison rapide et emballage soigné. Je recommande vivement !",
-            "name": "Fatima Z.",
-            "location": "Casablanca"
+            "text": "Khdit mn 3andhom chhal mn mra, a7san qualité saraha ! Les pistaches et noix de cajou toujours fraîches w l'emballage n9i. Je recommande 100%.",
+            "name": "Youssef B.",
+            "location": "Casablanca",
+            "is_google": true
           }
         },
         "rv2": {
           "type": "review",
           "settings": {
             "rating": 5,
-            "text": "J'ai commandé le coffret cadeau pour un anniversaire et c'était parfait. Présentation magnifique, produits frais et délicieux. Ma famille a adoré !",
-            "name": "Karim M.",
-            "location": "Rabat"
+            "text": "J'ai commandé le miel et l'amlou, tbarkellah le goût est exceptionnel, on sent l'artisanat. Twselni f wa9t w livraison très pro. Chokran Nutstree !",
+            "name": "Salma K.",
+            "location": "Rabat",
+            "is_google": true
           }
         },
         "rv3": {
           "type": "review",
           "settings": {
             "rating": 5,
-            "text": "Le miel est incroyable, on sent vraiment la différence avec les produits industriels. Et les amandes grillées au sel sont juste addictives. Commande reçue en 48h !",
-            "name": "Zineb A.",
-            "location": "Marrakech"
+            "text": "Top ! Des fruits secs de très haute qualité w le service client mzyan bzaf. C'est devenu ma boutique numéro 1 pour l'épicerie fine au Maroc.",
+            "name": "Omar T.",
+            "location": "Marrakech",
+            "is_google": true
           }
         }
       },
@@ -119,6 +122,7 @@
       "settings": {
         "eyebrow": "Ce que disent nos clients",
         "title": "Ils ont adoré Nutstree",
+        "google_maps_url": "#",
         "overall_text": "Note moyenne : 5\/5 — 200+ avis clients vérifiés",
         "color_background": "#EEF0E8",
         "color_card": "#FFFFFF",
