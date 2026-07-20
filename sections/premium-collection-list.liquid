@@ -1,202 +1,256 @@
-{% style %}
-  .premium-categories-{{ section.id }} {
-    --color-primary: {{ section.settings.color_primary | default: '#4A5D3A' }};
-    --color-secondary: {{ section.settings.color_secondary | default: '#B5651D' }};
-    --color-background: {{ section.settings.color_background | default: '#F5F0E6' }};
-    --color-text: {{ section.settings.color_text | default: '#2C2C2C' }};
-    --color-surface: {{ section.settings.color_surface | default: '#FFFFFF' }};
-    
-    background-color: var(--color-background);
-    padding: 6rem 1.5rem;
-    color: var(--color-text);
+{% comment %}
+  NUTSTREE — Grille Catégories Premium
+  Chaque catégorie a un dégradé de couleur distinct et une icône SVG thématique.
+  Fallback visuel coloré même sans image de collection.
+{% endcomment %}
+
+{%- style -%}
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+  .nt-cats-{{ section.id }} {
+    --c-primary: {{ section.settings.color_primary | default: '#3B4F2A' }};
+    --c-text:    {{ section.settings.color_text    | default: '#2C2C2C' }};
+    --c-bg:      {{ section.settings.color_background | default: '#F5F0E6' }};
+    background-color: var(--c-bg);
+    padding: 5rem 0 4rem;
   }
 
-  @media (min-width: 768px) {
-    .premium-categories-{{ section.id }} {
-      padding: 8rem 5%;
-    }
+  .nt-cats__inner {
+    padding: 0 1.25rem;
+    max-width: 1200px;
+    margin: 0 auto;
   }
 
-  .premium-categories__header {
-    text-align: center;
-    margin-bottom: 4rem;
+  .nt-cats__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
   }
 
-  .premium-categories__title {
-    font-family: var(--font-heading, 'Playfair Display', serif);
-    font-size: clamp(2rem, 4vw, 3.5rem);
-    color: var(--color-primary);
+  .nt-cats__title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    color: var(--c-primary);
     margin: 0;
-    font-weight: 700;
   }
 
-  .premium-categories__grid {
+  .nt-cats__view-all {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #C0622A;
+    text-decoration: none;
+  }
+
+  .nt-cats__grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
     list-style: none;
     padding: 0;
     margin: 0;
   }
 
   @media (min-width: 768px) {
-    .premium-categories__grid {
+    .nt-cats__grid {
       grid-template-columns: repeat({{ section.settings.columns_desktop | default: 3 }}, 1fr);
-      gap: 2.5rem;
+      gap: 1.25rem;
     }
   }
 
-  .premium-category-card {
-    display: block;
-    text-decoration: none;
+  .nt-cat-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    border-radius: 16px;
+    height: 106px;
     position: relative;
-    border-radius: 12px;
-    background-color: var(--color-surface);
     overflow: hidden;
-    aspect-ratio: 4 / 5;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-    transition: box-shadow 0.4s ease, transform 0.4s ease;
-    height: 100%;
-  }
-
-  .premium-category-card:hover {
-    box-shadow: 0 15px 35px rgba(74, 93, 58, 0.15);
-    transform: translateY(-5px);
-  }
-
-  .premium-category-card__image-wrapper {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-  }
-
-  .premium-category-card__image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .premium-category-card:hover .premium-category-card__image {
-    transform: scale(1.08);
-  }
-
-  /* Overlay gradient for text readability */
-  .premium-category-card::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 50%;
-    background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%);
-    z-index: 1;
-    pointer-events: none;
-  }
-
-  .premium-category-card__content {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    padding: 1.5rem 1rem;
-    z-index: 2;
-    text-align: center;
+    text-decoration: none;
+    padding: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
   @media (min-width: 768px) {
-    .premium-category-card__content {
-      padding: 2rem 1.5rem;
+    .nt-cat-card {
+      height: 140px;
     }
   }
 
-  .premium-category-card__title {
-    font-family: var(--font-heading, 'Playfair Display', serif);
-    font-size: clamp(1.2rem, 2vw, 1.75rem);
-    color: #FFFFFF;
-    margin: 0;
+  .nt-cat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 30px -14px rgba(0,0,0,.3);
+  }
+
+  /* Overlay for text readability */
+  .nt-cat-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(200deg, transparent 30%, rgba(0,0,0,.35));
+    pointer-events: none;
+  }
+
+  /* Background image (when present) */
+  .nt-cat-card__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .nt-cat-card:hover .nt-cat-card__img {
+    transform: scale(1.08);
+  }
+
+  /* Gradient fallback (always shown under image) */
+  .nt-cat-card__gradient {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+
+  .nt-cat-card__icon {
+    position: relative;
+    z-index: 2;
+    color: rgba(255,255,255,.9);
+    width: 22px;
+    height: 22px;
+    margin-bottom: 6px;
+    flex-shrink: 0;
+  }
+
+  .nt-cat-card__name {
+    position: relative;
+    z-index: 2;
+    color: #ffffff;
+    font-family: 'Inter', sans-serif;
     font-weight: 600;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    font-size: 13.5px;
+    line-height: 1.3;
+    text-shadow: 0 1px 3px rgba(0,0,0,.2);
   }
 
-  .premium-categories__footer {
+  /* ── Dégradés par défaut (identité visuelle mockup) ── */
+  .nt-cat-gradient--olive   { background: linear-gradient(135deg, #6B8A4A, #3B4F2A); }
+  .nt-cat-gradient--amber   { background: linear-gradient(135deg, #D9A94A, #C5A55A); }
+  .nt-cat-gradient--brown   { background: linear-gradient(135deg, #8B5A32, #5C3521); }
+  .nt-cat-gradient--terra   { background: linear-gradient(135deg, #D08055, #C0622A); }
+  .nt-cat-gradient--warm    { background: linear-gradient(135deg, #A68A55, #7A6339); }
+  .nt-cat-gradient--dark    { background: linear-gradient(135deg, #8B3E18, #5C2A0F); }
+
+  .nt-cats__footer {
     text-align: center;
-    margin-top: 4rem;
+    margin-top: 2rem;
   }
 
-  .premium-categories__btn {
+  .nt-cats__btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     min-height: 48px;
-    padding: 1rem 3rem;
-    background-color: transparent;
-    color: var(--color-primary);
-    font-family: var(--font-body, 'Inter', sans-serif);
-    font-size: 1rem;
-    font-weight: 500;
-    text-decoration: none;
+    padding: 0 2.5rem;
+    background: transparent;
+    color: var(--c-primary);
+    border: 1.5px solid var(--c-primary);
     border-radius: 50px;
-    transition: all 0.4s ease;
-    border: 2px solid var(--color-primary);
-    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.25s ease;
   }
 
-  .premium-categories__btn:hover {
-    background-color: var(--color-primary);
-    color: var(--color-surface);
+  .nt-cats__btn:hover {
+    background: var(--c-primary);
+    color: #fff;
     transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(74, 93, 58, 0.2);
+    box-shadow: 0 10px 20px rgba(59,79,42,.2);
   }
-{% endstyle %}
+{%- endstyle -%}
 
-<div class="premium-categories-{{ section.id }}">
-  <div class="page-width">
+{%- liquid
+  assign gradient_classes = 'nt-cat-gradient--olive,nt-cat-gradient--amber,nt-cat-gradient--brown,nt-cat-gradient--terra,nt-cat-gradient--warm,nt-cat-gradient--dark' | split: ','
+-%}
+
+<div class="nt-cats-{{ section.id }}">
+  <div class="nt-cats__inner">
     {%- if section.settings.title != blank -%}
-      <div class="premium-categories__header">
-        <h2 class="premium-categories__title">{{ section.settings.title | escape }}</h2>
+      <div class="nt-cats__header">
+        <h2 class="nt-cats__title">{{ section.settings.title | escape }}</h2>
+        {%- if section.settings.show_view_all -%}
+          <a href="/collections" class="nt-cats__view-all">Tout voir →</a>
+        {%- endif -%}
       </div>
     {%- endif -%}
 
-    <ul class="premium-categories__grid">
+    <ul class="nt-cats__grid">
       {%- for block in section.blocks -%}
+        {%- assign collection = collections[block.settings.collection] -%}
+        {%- assign image       = block.settings.image | default: collection.image | default: collection.products.first.featured_image -%}
+        {%- assign title       = block.settings.title | default: collection.title | default: 'Catégorie' -%}
+        {%- assign link        = collection.url | default: '/collections' -%}
+        {%- assign grad_index  = forloop.index0 | modulo: 6 -%}
+        {%- assign default_grad = gradient_classes[grad_index] -%}
+        {%- assign gradient_class = block.settings.gradient_class | default: default_grad -%}
+        {%- assign icon_id     = block.settings.icon | default: 'leaf' -%}
+
         <li {{ block.shopify_attributes }}>
-          {%- assign collection = collections[block.settings.collection] -%}
-          {%- assign image = block.settings.image | default: collection.image | default: collection.products.first.featured_image -%}
-          {%- assign title = block.settings.title | default: collection.title -%}
-          {%- assign link = collection.url | default: '/collections' -%}
-          
-          <a href="{{ link }}" class="premium-category-card">
-            <div class="premium-category-card__image-wrapper">
-              {%- if image != blank -%}
-                <img 
-                  src="{{ image | image_url: width: 800 }}" 
-                  alt="{{ title | escape }}"
-                  class="premium-category-card__image"
-                  loading="lazy"
-                  width="800"
-                  height="auto"
-                >
-              {%- else -%}
-                {{ 'collection-1' | placeholder_svg_tag: 'premium-category-card__image' }}
-              {%- endif -%}
+          <a href="{{ link }}" class="nt-cat-card">
+
+            {%- comment -%}— Gradient background (always present, behind image) —{%- endcomment -%}
+            <div class="nt-cat-card__gradient {{ gradient_class }}"></div>
+
+            {%- comment -%}— Real image when available —{%- endcomment -%}
+            {%- if image != blank -%}
+              <img
+                src="{{ image | image_url: width: 800 }}"
+                alt="{{ title | escape }}"
+                class="nt-cat-card__img"
+                loading="lazy"
+                width="800"
+                height="400"
+              >
+            {%- endif -%}
+
+            {%- comment -%}— Thematic SVG icon —{%- endcomment -%}
+            <div class="nt-cat-card__icon" aria-hidden="true">
+              {%- case icon_id -%}
+                {%- when 'leaf' -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8 6 6 9 6 13a6 6 0 0012 0c0-4-2-7-6-11z"/><path d="M12 22v-9"/></svg>
+                {%- when 'honey' -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 5h6l-4 4 2 6-7-4-7 4 2-6L3 7h6z"/><path d="M12 11v4"/></svg>
+                {%- when 'chocolate' -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M9 5v14M15 5v14"/></svg>
+                {%- when 'fruit' -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="7"/><path d="M12 6V3m-3 3c0-1.7 1.3-3 3-3s3 1.3 3 3"/></svg>
+                {%- when 'spice' -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v10M8 7l4-4 4 4M6 13h12l-1.5 8h-9z"/></svg>
+                {%- when 'gift' -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v9H4v-9M2 7h20v5H2zM12 7V3M12 7c-2 0-3.5-2-2-4 2-1 2.5 1.5 2 4zM12 7c2 0 3.5-2 2-4-2-1-2.5 1.5-2 4z"/></svg>
+                {%- when 'dates' -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="14" rx="5" ry="7"/><path d="M12 7V3"/><path d="M9 5c0 0 1-2 3-2s3 2 3 2"/></svg>
+                {%- when 'nuts' -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3C7 3 4 7 4 12s3 9 8 9 8-4 8-9-3-9-8-9z"/><path d="M12 8v4l3 2"/></svg>
+                {%- else -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8 6 6 9 6 13a6 6 0 0012 0c0-4-2-7-6-11z"/></svg>
+              {%- endcase -%}
             </div>
-            <div class="premium-category-card__content">
-              <h3 class="premium-category-card__title">{{ title | default: 'Catégorie' }}</h3>
-            </div>
+
+            <span class="nt-cat-card__name">{{ title }}</span>
+
           </a>
         </li>
       {%- endfor -%}
     </ul>
 
-    {%- if section.settings.show_view_all -%}
-      <div class="premium-categories__footer">
-        <a href="/collections" class="premium-categories__btn">
-          {{ section.settings.view_all_text | default: 'Voir toutes les catégories' }}
-        </a>
+    {%- if section.settings.show_view_all and section.settings.btn_text != blank -%}
+      <div class="nt-cats__footer">
+        <a href="/collections" class="nt-cats__btn">{{ section.settings.btn_text | escape }}</a>
       </div>
     {%- endif -%}
   </div>
@@ -212,7 +266,7 @@
       "type": "text",
       "id": "title",
       "label": "Titre de la section",
-      "default": "Découvrez nos univers"
+      "default": "Nos univers"
     },
     {
       "type": "range",
@@ -227,12 +281,12 @@
       "type": "checkbox",
       "id": "show_view_all",
       "default": true,
-      "label": "Afficher le bouton 'Tout voir'"
+      "label": "Afficher le lien 'Tout voir'"
     },
     {
       "type": "text",
-      "id": "view_all_text",
-      "label": "Texte du bouton",
+      "id": "btn_text",
+      "label": "Texte du bouton du bas",
       "default": "Voir toutes les catégories"
     },
     {
@@ -242,19 +296,13 @@
     {
       "type": "color",
       "id": "color_primary",
-      "label": "Primaire",
-      "default": "#4A5D3A"
-    },
-    {
-      "type": "color",
-      "id": "color_secondary",
-      "label": "Secondaire",
-      "default": "#B5651D"
+      "label": "Titre",
+      "default": "#3B4F2A"
     },
     {
       "type": "color",
       "id": "color_background",
-      "label": "Fond",
+      "label": "Fond de section",
       "default": "#F5F0E6"
     },
     {
@@ -262,17 +310,11 @@
       "id": "color_text",
       "label": "Texte",
       "default": "#2C2C2C"
-    },
-    {
-      "type": "color",
-      "id": "color_surface",
-      "label": "Surface de carte",
-      "default": "#FFFFFF"
     }
   ],
   "blocks": [
     {
-      "type": "collection",
+      "type": "category",
       "name": "Catégorie",
       "settings": [
         {
@@ -281,16 +323,44 @@
           "label": "Collection Shopify"
         },
         {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Image (Optionnel)",
-          "info": "Remplace l'image par défaut de la collection."
-        },
-        {
           "type": "text",
           "id": "title",
-          "label": "Titre (Optionnel)",
-          "info": "Remplace le nom par défaut de la collection."
+          "label": "Titre (optionnel — remplace le nom de la collection)"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image (optionnel — remplace l'image de la collection)"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icône thématique",
+          "default": "leaf",
+          "options": [
+            { "value": "leaf",       "label": "🌿 Feuille (Fruits secs)" },
+            { "value": "honey",      "label": "🍯 Miel" },
+            { "value": "chocolate",  "label": "🍫 Chocolat" },
+            { "value": "fruit",      "label": "🍊 Fruit (Fruits confits)" },
+            { "value": "spice",      "label": "🌶 Épices" },
+            { "value": "gift",       "label": "🎁 Coffret cadeau" },
+            { "value": "dates",      "label": "🌴 Dattes" },
+            { "value": "nuts",       "label": "🥜 Oléagineux" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "gradient_class",
+          "label": "Couleur de fond (dégradé)",
+          "default": "nt-cat-gradient--olive",
+          "options": [
+            { "value": "nt-cat-gradient--olive",  "label": "🟢 Vert olive (Fruits secs)" },
+            { "value": "nt-cat-gradient--amber",  "label": "🟡 Ambré (Miel)" },
+            { "value": "nt-cat-gradient--brown",  "label": "🟤 Brun (Chocolat)" },
+            { "value": "nt-cat-gradient--terra",  "label": "🔴 Terracotta (Fruits confits)" },
+            { "value": "nt-cat-gradient--warm",   "label": "🟠 Chaud (Épices)" },
+            { "value": "nt-cat-gradient--dark",   "label": "⬛ Sombre (Coffrets)" }
+          ]
         }
       ]
     }
@@ -300,39 +370,51 @@
       "name": "Catégories Premium",
       "blocks": [
         {
-          "type": "collection",
+          "type": "category",
           "settings": {
-            "title": "Fruits secs"
+            "title": "Fruits secs",
+            "icon": "leaf",
+            "gradient_class": "nt-cat-gradient--olive"
           }
         },
         {
-          "type": "collection",
+          "type": "category",
           "settings": {
-            "title": "Miel"
+            "title": "Miel",
+            "icon": "honey",
+            "gradient_class": "nt-cat-gradient--amber"
           }
         },
         {
-          "type": "collection",
+          "type": "category",
           "settings": {
-            "title": "Chocolat"
+            "title": "Chocolat",
+            "icon": "chocolate",
+            "gradient_class": "nt-cat-gradient--brown"
           }
         },
         {
-          "type": "collection",
+          "type": "category",
           "settings": {
-            "title": "Fruits confits"
+            "title": "Fruits confits",
+            "icon": "fruit",
+            "gradient_class": "nt-cat-gradient--terra"
           }
         },
         {
-          "type": "collection",
+          "type": "category",
           "settings": {
-            "title": "Épices"
+            "title": "Épices",
+            "icon": "spice",
+            "gradient_class": "nt-cat-gradient--warm"
           }
         },
         {
-          "type": "collection",
+          "type": "category",
           "settings": {
-            "title": "Cadeaux / Coffrets"
+            "title": "Coffrets cadeaux",
+            "icon": "gift",
+            "gradient_class": "nt-cat-gradient--dark"
           }
         }
       ]

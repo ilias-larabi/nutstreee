@@ -1,0 +1,190 @@
+{% comment %}
+  NUTSTREE — Best-sellers Carousel (Mobile-First)
+  Reproduit fidèlement les cartes produit de la maquette mobile :
+  - Photo carré 110px avec dégradé de marque
+  - Titre bilingue FR/AR sur 2 lignes (bidi isolé)
+  - Quick Add "+" en bas à droite de la photo
+  - Mini-tag prix/poids sur fond vert sage
+{% endcomment %}
+
+{{- 'nutstree-featured-products.css' | asset_url | stylesheet_tag -}}
+
+<div class="nt-featured-{{ section.id }}" id="nt-featured-{{ section.id }}">
+  <div class="nt-featured__inner">
+
+    {%- if section.settings.title != blank or section.settings.link_text != blank -%}
+      <div class="nt-featured__header">
+        {%- if section.settings.title != blank -%}
+          <h2 class="nt-featured__title">{{ section.settings.title | escape }}</h2>
+        {%- endif -%}
+        {%- if section.settings.link_text != blank and section.settings.link_url != blank -%}
+          <a href="{{ section.settings.link_url }}" class="nt-featured__link">{{ section.settings.link_text | escape }} →</a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="nt-featured__scroll-wrapper">
+      <ul class="nt-featured__scroll" id="nt-featured-scroll-{{ section.id }}">
+
+        {%- if section.settings.collection != blank -%}
+          {%- assign featured_products = collections[section.settings.collection].products -%}
+        {%- else -%}
+          {%- assign featured_products = collections.all.products -%}
+        {%- endif -%}
+
+        {%- assign product_limit = section.settings.product_count | default: 8 -%}
+
+        {%- for product in featured_products limit: product_limit -%}
+          {%- assign variant = product.selected_or_first_available_variant -%}
+
+          <li class="nt-p-card">
+            {%- comment -%}── Photo ──{%- endcomment -%}
+            <a href="{{ product.url }}" class="nt-p-card__photo-link" aria-label="{{ product.title | escape }}">
+              <div class="nt-p-card__photo nt-p-photo-{{ forloop.index | modulo: 4 | plus: 1 }}">
+                {%- if product.featured_image -%}
+                  <img
+                    src="{{ product.featured_image | image_url: width: 400 }}"
+                    alt="{{ product.featured_image.alt | default: product.title | escape }}"
+                    class="nt-p-card__img"
+                    loading="lazy"
+                    width="200"
+                    height="200"
+                  >
+                {%- endif -%}
+
+                {%- comment -%}── Quick Add "+" ──{%- endcomment -%}
+                {%- if variant.available -%}
+                  <button
+                    type="button"
+                    class="nt-p-card__quick-add"
+                    aria-label="{{ 'products.product.add_to_cart' | t }} — {{ product.title | escape }}"
+                    data-variant-id="{{ variant.id }}"
+                    data-product-id="{{ product.id }}"
+                    data-product-url="{{ product.url }}"
+                  >
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round">
+                      <path d="M12 5v14M5 12h14"/>
+                    </svg>
+                  </button>
+                {%- endif -%}
+              </div>
+            </a>
+
+            {%- comment -%}── Title (bilingual) ──{%- endcomment -%}
+            <a href="{{ product.url }}" class="nt-p-card__title-link">
+              <div class="nt-p-card__title">{{ product.title | escape }}</div>
+            </a>
+
+            {%- comment -%}── Price row with mini-tag ──{%- endcomment -%}
+            <div class="nt-p-card__price-row">
+              <div class="nt-p-card__mini-tag">
+                <div class="nt-p-card__price">{{ variant.price | money_without_trailing_zeros }}</div>
+                {%- if variant.title != 'Default Title' -%}
+                  <div class="nt-p-card__weight">{{ variant.title | escape }}</div>
+                {%- endif -%}
+              </div>
+            </div>
+
+          </li>
+        {%- else -%}
+          {%- comment -%}— Placeholder cards si pas de produits —{%- endcomment -%}
+          {%- for i in (1..4) -%}
+            <li class="nt-p-card nt-p-card--placeholder">
+              <div class="nt-p-card__photo nt-p-photo-{{ i }}"></div>
+              <div class="nt-p-card__title">{{ 'onboarding.product_title' | t }}</div>
+              <div class="nt-p-card__price-row">
+                <div class="nt-p-card__mini-tag">
+                  <div class="nt-p-card__price">0 DH</div>
+                </div>
+              </div>
+            </li>
+          {%- endfor -%}
+        {%- endfor -%}
+
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function() {
+  // Quick Add — lightweight fetch to cart
+  var cards = document.querySelectorAll('#nt-featured-{{ section.id }} .nt-p-card__quick-add');
+  cards.forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      var variantId = btn.dataset.variantId;
+      if (!variantId) return;
+      btn.classList.add('nt-p-card__quick-add--loading');
+      fetch('/cart/add.json', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ id: variantId, quantity: 1 })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function() {
+        btn.classList.remove('nt-p-card__quick-add--loading');
+        btn.classList.add('nt-p-card__quick-add--added');
+        btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M5 13l4 4L19 7"/></svg>';
+        // Update cart count (Dawn's event)
+        document.dispatchEvent(new CustomEvent('cart:refresh', { bubbles: true }));
+        setTimeout(function() {
+          btn.classList.remove('nt-p-card__quick-add--added');
+          btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>';
+        }, 1800);
+      })
+      .catch(function() {
+        btn.classList.remove('nt-p-card__quick-add--loading');
+        window.location.href = btn.dataset.productUrl;
+      });
+    });
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Best-sellers Nutstree",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titre de la section",
+      "default": "Nos best-sellers"
+    },
+    {
+      "type": "text",
+      "id": "link_text",
+      "label": "Texte du lien \"Tout voir\"",
+      "default": "Tout voir"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "Lien \"Tout voir\""
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection à afficher"
+    },
+    {
+      "type": "range",
+      "id": "product_count",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 6,
+      "label": "Nombre de produits"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Best-sellers Nutstree"
+    }
+  ]
+}
+{% endschema %}

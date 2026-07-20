@@ -1,0 +1,226 @@
+/* NUTSTREE — Best-sellers Carousel CSS
+   Reproduit fidèlement la maquette mobile : cartes 152px, mini-tag, quick-add
+*/
+
+.nt-featured-section-wrap {
+  --c-primary: #3B4F2A;
+  --c-terracotta: #C0622A;
+  --c-terracotta-dark: #8B3E18;
+  --c-gold: #C5A55A;
+  --c-cream: #F5F0E6;
+  --c-cream-soft: #FEFCF8;
+  --c-sage: #EEF0E8;
+  --c-ink: #1E1E1E;
+  --c-ink-soft: #6B6B5C;
+}
+
+[class*="nt-featured-"] {
+  background-color: #F5F0E6;
+}
+
+.nt-featured__inner {
+  padding: 2rem 0 0.5rem;
+}
+
+/* ── Header ── */
+.nt-featured__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 0 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.nt-featured__title {
+  font-family: 'Playfair Display', serif;
+  font-weight: 600;
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  color: #3B4F2A;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.nt-featured__link {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #C0622A;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+/* ── Scroll Wrapper ── */
+.nt-featured__scroll-wrapper {
+  /* Allows cards to overflow and scroll while inner content has padding */
+}
+
+.nt-featured__scroll {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  padding: 4px 1.25rem 1.5rem;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  list-style: none;
+  margin: 0;
+}
+
+.nt-featured__scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Product Card ── */
+.nt-p-card {
+  scroll-snap-align: start;
+  flex: 0 0 152px;
+  background: #FEFCF8;
+  border-radius: 16px;
+  padding: 12px;
+  border: 1px solid rgba(59, 79, 42, 0.08);
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .nt-featured__scroll {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    padding: 4px 1.25rem 1.5rem;
+  }
+
+  .nt-p-card {
+    flex: 0 0 calc(25% - 12px);
+  }
+}
+
+.nt-p-card__photo-link {
+  display: block;
+  text-decoration: none;
+}
+
+/* ── Photo Area ── */
+.nt-p-card__photo {
+  width: 100%;
+  height: 110px;
+  border-radius: 11px;
+  margin-bottom: 10px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Gradient placeholders (shown behind the real image) */
+.nt-p-photo-1 { background: radial-gradient(circle at 35% 30%, #E4C077, #C5A55A 70%); }
+.nt-p-photo-2 { background: radial-gradient(circle at 35% 30%, #8A5A3C, #5C3521 75%); }
+.nt-p-photo-3 { background: radial-gradient(circle at 35% 30%, #9C7A45, #6B4F26 75%); }
+.nt-p-photo-4 { background: radial-gradient(circle at 35% 30%, #D6A93F, #A9781C 75%); }
+
+.nt-p-card__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 11px;
+}
+
+/* ── Quick Add Button ── */
+.nt-p-card__quick-add {
+  position: absolute;
+  bottom: 7px;
+  right: 7px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #FEFCF8;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #3B4F2A;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 2;
+}
+
+.nt-p-card__quick-add:hover {
+  background: #3B4F2A;
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.nt-p-card__quick-add--loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.nt-p-card__quick-add--added {
+  background: #3B4F2A;
+  color: #fff;
+}
+
+/* ── Title (bilingual) ── */
+.nt-p-card__title-link {
+  text-decoration: none;
+  flex: 1;
+}
+
+.nt-p-card__title {
+  font-family: 'Inter', sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #1E1E1E;
+  line-height: 1.4;
+  unicode-bidi: isolate; /* Critical for FR/AR mixed titles */
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  min-height: 34px;
+  margin-bottom: 9px;
+}
+
+/* ── Price Row & Mini-Tag ── */
+.nt-p-card__price-row {
+  display: flex;
+  align-items: center;
+  margin-top: auto;
+}
+
+.nt-p-card__mini-tag {
+  background: #EEF0E8;
+  border-radius: 6px;
+  padding: 5px 9px;
+}
+
+.nt-p-card__price {
+  font-family: 'Playfair Display', serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #8B3E18;
+  line-height: 1.2;
+}
+
+.nt-p-card__weight {
+  font-family: 'Inter', sans-serif;
+  font-size: 9.5px;
+  color: #6B6B5C;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin-top: 1px;
+}
+
+/* ── Placeholder state ── */
+.nt-p-card--placeholder .nt-p-card__photo {
+  background: linear-gradient(135deg, #d0c8b5, #b8b0a0);
+}
+
+.nt-p-card--placeholder .nt-p-card__title {
+  background: rgba(0,0,0,0.08);
+  border-radius: 4px;
+  color: transparent;
+}
