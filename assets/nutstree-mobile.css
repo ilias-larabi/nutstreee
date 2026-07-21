@@ -199,29 +199,10 @@
    Phase 1E: Image Uniformity (Adaptation Automatique)
    ============================================================ */
 
-/* Force all product card images to be perfect squares regardless of original size */
-.card__media {
-  aspect-ratio: 1 / 1 !important;
-  width: 100%;
-  height: auto;
-  position: relative;
-  overflow: hidden;
-  background-color: #FFFFFF; /* Fallback if image is transparent/smaller */
-}
-
-.card__media img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important; /* Forces the image to fill the square perfectly without distortion */
-  object-position: center;
-}
-
-/* Fix for secondary image on hover */
-.card__media .media > img + img {
+/* Force images to fill their container without creating double-padding issues */
+.card__inner .media img {
   object-fit: cover !important;
+  object-position: center !important;
 }
 
 /* ============================================================
