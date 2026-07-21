@@ -157,3 +157,40 @@
   text-align: center;
   margin-bottom: 2rem;
 }
+
+/* Small Quick Add Button (+) on Product Cards */
+.card-information {
+  position: relative; /* Ensure the button positions relative to the info block */
+}
+
+.nt-small-quick-add {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 2;
+}
+
+.nt-sqa-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background-color: #3B4F2A; /* Olive */
+  color: #FFFFFF;
+  border: none;
+  border-radius: 50%;
+  font-size: 22px;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(59, 79, 42, 0.2);
+  line-height: 1;
+  padding-bottom: 2px; /* optical center adjustment for the plus sign */
+}
+
+.nt-sqa-btn:hover {
+  background-color: #232F17;
+  transform: scale(1.1);
+  box-shadow: 0 6px 15px rgba(59, 79, 42, 0.3);
+}
