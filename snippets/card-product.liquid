@@ -210,14 +210,15 @@
               
               {%- comment -%} Small Quick Add Button (+) {%- endcomment -%}
               {%- if card_product.available -%}
+                {%- assign small_form_id = 'quick-add-' | append: section_id | append: card_product.id | append: '-small' -%}
                 <div class="nt-small-quick-add">
-                  <product-form>
-                    <form method="post" action="/cart/add" class="nt-sqa-form">
-                      <input type="hidden" name="id" value="{{ card_product.selected_or_first_available_variant.id }}">
-                      <button type="submit" class="nt-sqa-btn" title="Ajouter au panier" aria-label="Ajouter au panier">
+                  <product-form data-section-id="{{ section_id }}">
+                    {%- form 'product', card_product, id: small_form_id, class: 'nt-sqa-form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+                      <input type="hidden" name="id" value="{{ card_product.selected_or_first_available_variant.id }}" class="product-variant-id">
+                      <button type="submit" name="add" class="nt-sqa-btn" title="Ajouter au panier" aria-label="Ajouter au panier" aria-haspopup="dialog">
                         +
                       </button>
-                    </form>
+                    {%- endform -%}
                   </product-form>
                 </div>
               {%- endif -%}
