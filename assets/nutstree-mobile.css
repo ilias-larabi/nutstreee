@@ -209,8 +209,8 @@
    Phase 1D: Premium Cart Drawer & Cart Page
    ============================================================ */
 
-/* Drawer Global Background */
-.drawer__inner, .cart__contents {
+/* Drawer & Cart Page Global Background */
+.drawer__inner, .cart__contents, cart-items, #main-cart-footer {
   background-color: #F5F0E6 !important; /* Cream */
 }
 
