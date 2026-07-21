@@ -12,8 +12,68 @@
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
+
+  .nt-customer-wrapper {
+    background-color: #FEFCF8; /* --cream-soft */
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 16px;
+  }
+  .customer.register {
+    background: #FFFFFF;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    padding: 40px 24px;
+    max-width: 500px;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .customer.register h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    color: #3B4F2A; /* Olive */
+    margin-bottom: 24px;
+    margin-top: 0;
+  }
+  .customer.register .field__input {
+    border: 1px solid #EEF0E8;
+    border-radius: 8px;
+    background-color: #FEFCF8;
+    color: #1E1E1E;
+    box-shadow: none;
+  }
+  .customer.register .field__input:focus {
+    border-color: #C5A55A;
+    box-shadow: 0 0 0 1px #C5A55A;
+  }
+  .customer.register button {
+    background-color: #3B4F2A;
+    color: #FFFFFF;
+    border-radius: 8px;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    margin-top: 1rem;
+  }
+  .customer.register button:hover {
+    background-color: #232F17;
+  }
+  .customer.register a {
+    color: #C0622A; /* Terracotta */
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    transition: color 0.3s ease;
+  }
+  .customer.register a:hover {
+    color: #8B3E18;
+  }
 {%- endstyle -%}
 
+<div class="nt-customer-wrapper">
 <div class="customer register section-{{ section.id }}-padding">
   <h1>
     {{ 'customer.register.title' | t }}
@@ -131,6 +191,7 @@
       {{ 'customer.register.submit' | t }}
     </button>
   {%- endform -%}
+</div>
 </div>
 
 {% schema %}
