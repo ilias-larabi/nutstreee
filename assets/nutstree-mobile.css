@@ -194,3 +194,87 @@
   transform: scale(1.1);
   box-shadow: 0 6px 15px rgba(59, 79, 42, 0.3);
 }
+
+/* ============================================================
+   Phase 1D: Premium Cart Drawer & Cart Page
+   ============================================================ */
+
+/* Drawer Global Background */
+.drawer__inner, .cart__contents {
+  background-color: #F5F0E6 !important; /* Cream */
+}
+
+/* Drawer Header */
+.drawer__heading, .cart__empty-text, .title-wrapper-with-link .title {
+  font-family: 'Playfair Display', serif !important;
+  color: #3B4F2A !important; /* Olive */
+  font-weight: 700;
+}
+
+/* Cart Items (Cards) */
+.cart-item {
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+  display: flex;
+  align-items: center;
+}
+
+/* Product Titles in Cart */
+.cart-item__name {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  color: #3B4F2A !important;
+  text-decoration: none;
+}
+
+/* Cart Prices */
+.cart-item__price-wrapper .price, .totals__total-value {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  color: #C0622A !important; /* Terracotta */
+}
+
+/* Subtotal text */
+.totals__total {
+  font-family: 'Playfair Display', serif;
+  color: #3B4F2A;
+  font-size: 1.25rem;
+}
+
+/* Checkout Button */
+#CartDrawer-Checkout, .cart__checkout-button {
+  background-color: #3B4F2A !important;
+  color: #FFFFFF !important;
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 700 !important;
+  border-radius: 8px !important;
+  transition: all 0.3s ease;
+  min-height: 52px;
+  box-shadow: 0 4px 15px rgba(59, 79, 42, 0.2);
+}
+
+#CartDrawer-Checkout:hover, .cart__checkout-button:hover {
+  background-color: #232F17 !important;
+  box-shadow: 0 6px 20px rgba(35, 47, 23, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Cart Quantity inputs */
+.quantity {
+  background-color: #F5F0E6;
+  border: 1px solid rgba(59, 79, 42, 0.1);
+  border-radius: 6px;
+}
+.quantity__button {
+  color: #3B4F2A;
+}
+
+/* Empty cart button */
+.drawer__inner-empty .button {
+  background-color: #3B4F2A;
+  color: #FFFFFF;
+  border-radius: 8px;
+}
