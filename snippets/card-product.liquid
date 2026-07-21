@@ -214,10 +214,16 @@
                 {%- assign small_form_id = 'quick-add-' | append: section_id | append: card_product.id | append: '-small' -%}
                 <div class="nt-small-quick-add">
                   <product-form data-section-id="{{ section_id }}">
+                    <div class="product-form__error-message-wrapper" role="alert" hidden>
+                      <span class="product-form__error-message"></span>
+                    </div>
                     {%- form 'product', card_product, id: small_form_id, class: 'nt-sqa-form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
                       <input type="hidden" name="id" value="{{ card_product.selected_or_first_available_variant.id }}" class="product-variant-id">
                       <button type="submit" name="add" class="nt-sqa-btn" title="Ajouter au panier" aria-label="Ajouter au panier" aria-haspopup="dialog">
-                        +
+                        <span>+</span>
+                        <div class="loading__spinner hidden">
+                          <svg aria-hidden="true" focusable="false" class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg"><circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle></svg>
+                        </div>
                       </button>
                     {%- endform -%}
                   </product-form>
