@@ -170,6 +170,40 @@
   z-index: 2;
 }
 
+/* Force all product card images and their containers to be perfect squares regardless of original size */
+.card-wrapper .card__inner {
+  aspect-ratio: 1 / 1 !important;
+  width: 100%;
+  height: auto;
+  position: relative;
+  overflow: hidden;
+  background-color: #F9F7F1; /* Fallback if image is missing */
+}
+
+.card__media {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* For products without images: center the title in the square to act as a placeholder */
+.card--text .card__inner {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1rem;
+}
+
+.card--text .card__inner .card__heading {
+  font-family: 'Playfair Display', serif !important;
+  font-size: 1.4rem;
+  color: #3B4F2A;
+  margin: 0;
+}
+
 .nt-sqa-btn {
   display: flex;
   align-items: center;
