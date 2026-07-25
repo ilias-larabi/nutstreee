@@ -16,39 +16,73 @@
         "title": "Le meilleur de la nature, <em>torréfié</em> avec passion",
         "description": "Sélection artisanale, du producteur à votre table. Torréfié avec soin, livré frais au Maroc.",
         "btn_label": "Découvrir la boutique",
-        "btn_link": "shopify:\/\/collections\/all",
+        "btn_link": "shopify://collections/all",
         "btn2_label": "Nos catégories",
-        "btn2_link": "shopify:\/\/collections",
+        "btn2_link": "shopify://collections",
         "proof_count": "200+",
         "proof_text": "clients satisfaits au Maroc",
-        "image_link": "shopify:\/\/collections\/all",
+        "image": "shopify://shop_images/imfiof0rik6opzulpphn.png",
+        "image_link": "shopify://collections/all",
         "badge_text": "100% Artisanal",
-        "tag_weight": "250g",
-        "tag_price": "150 DH",
+        "tag_weight": "250g x 6",
+        "tag_price": "200 DH",
         "watermark_text": "Nutstree",
-        "color_background": "#F5F0E6",
-        "color_primary": "#3B4F2A",
-        "color_secondary": "#C0622A",
-        "color_gold": "#C5A55A",
-        "color_text": "#1E1E1E",
-        "color_muted": "#6B6B5C"
+        "color_background": "#f5f0e6",
+        "color_primary": "#3b4f2a",
+        "color_secondary": "#c0622a",
+        "color_gold": "#c5a55a",
+        "color_text": "#1e1e1e",
+        "color_muted": "#6b6b5c"
       }
     },
     "reassurance": {
       "type": "nutstree-reassurance",
       "blocks": {
-        "r1": { "type": "item", "settings": { "icon": "leaf",  "label": "100% Naturel",        "sublabel": "Sans additifs ni conservateurs" } },
-        "r2": { "type": "item", "settings": { "icon": "truck", "label": "Livraison Express",    "sublabel": "Partout au Maroc" } },
-        "r3": { "type": "item", "settings": { "icon": "star",  "label": "Qualité Artisanale",   "sublabel": "Sélectionné à la source" } },
-        "r4": { "type": "item", "settings": { "icon": "lock",  "label": "Paiement Sécurisé",    "sublabel": "100% sécurisé & fiable" } }
+        "r1": {
+          "type": "item",
+          "settings": {
+            "icon": "leaf",
+            "label": "100% Naturel",
+            "sublabel": "Sans additifs ni conservateurs"
+          }
+        },
+        "r2": {
+          "type": "item",
+          "settings": {
+            "icon": "truck",
+            "label": "Livraison Express",
+            "sublabel": "Partout au Maroc"
+          }
+        },
+        "r3": {
+          "type": "item",
+          "settings": {
+            "icon": "star",
+            "label": "Qualité Artisanale",
+            "sublabel": "Sélectionné à la source"
+          }
+        },
+        "r4": {
+          "type": "item",
+          "settings": {
+            "icon": "lock",
+            "label": "Paiement Sécurisé",
+            "sublabel": "100% sécurisé & fiable"
+          }
+        }
       },
-      "block_order": ["r1", "r2", "r3", "r4"],
+      "block_order": [
+        "r1",
+        "r2",
+        "r3",
+        "r4"
+      ],
       "settings": {
-        "bg_color": "#FEFCF8",
-        "color_primary": "#3B4F2A",
-        "color_accent": "#C0622A",
-        "color_text": "#1E1E1E",
-        "color_muted": "#6B6B5C"
+        "bg_color": "#fefcf8",
+        "color_primary": "#3b4f2a",
+        "color_accent": "#c0622a",
+        "color_text": "#1e1e1e",
+        "color_muted": "#6b6b5c"
       }
     },
     "featured_products": {
@@ -56,7 +90,8 @@
       "settings": {
         "title": "Nos best-sellers",
         "link_text": "Tout voir",
-        "link_url": "\/collections\/all",
+        "link_url": "/collections/all",
+        "collection": "",
         "product_count": 6
       }
     },
@@ -68,29 +103,30 @@
         "title": "Une passion transmise, un engagement naturel",
         "text": "<p>Chez Nutstree, chaque fruit sec est soigneusement sélectionné à la source, torréfié artisanalement pour révéler toutes ses saveurs. Notre mission : vous apporter le meilleur de la nature, directement du producteur à votre table.</p><p>Fruits secs, miel, épices et coffrets cadeaux — tout est préparé avec soin et expédié frais partout au Maroc.</p>",
         "btn_label": "Découvrir notre histoire",
+        "btn_link": "",
         "stat1_number": "200+",
         "stat1_label": "Clients fidèles",
         "stat2_number": "15+",
         "stat2_label": "Variétés de produits",
         "stat3_number": "100%",
         "stat3_label": "Naturel & artisanal",
-        "color_background": "#3B4F2A",
-        "color_text": "#F5F0E6",
-        "color_accent": "#C5A55A"
+        "color_background": "#3b4f2a",
+        "color_text": "#f5f0e6",
+        "color_accent": "#c5a55a"
       }
     },
     "premium_categories": {
       "type": "premium-collection-list",
       "settings": {
         "title": "Nos univers",
-        "columns_desktop": 3,
         "max_collections": 12,
+        "columns_desktop": 3,
         "show_count": true,
         "show_view_all": true,
         "btn_text": "Voir toutes les catégories",
-        "color_primary": "#3B4F2A",
-        "color_background": "#F5F0E6",
-        "color_text": "#1E1E1E"
+        "color_primary": "#3b4f2a",
+        "color_background": "#f5f0e6",
+        "color_text": "#1e1e1e"
       }
     },
     "reviews": {
@@ -127,19 +163,23 @@
           }
         }
       },
-      "block_order": ["rv1", "rv2", "rv3"],
+      "block_order": [
+        "rv1",
+        "rv2",
+        "rv3"
+      ],
       "settings": {
         "eyebrow": "Ce que disent nos clients",
         "title": "Ils ont adoré Nutstree",
+        "overall_text": "Note moyenne : 5/5 — 200+ avis clients vérifiés",
         "google_maps_url": "https://www.google.com/search?sca_esv=3f4a3b12c1dfeeaa&hl=en-MA&sxsrf=APpeQnvvaxy56ummV7SblND_yfVA2RtdpA:1784566745972&q=Nuts+Tree+Casablanca&si=APenkKm7iecQ4G6P-TsbSMFKIQtv3EFIqRAFw-i8uEbk55Z-_y0jJR3CeaSfUBDzVBoWROZnQshKKbC7UoKlbkcNswOkzOaq9TKm9Xot20jSY24ZRkWD9ySxzpgHyqYm-TGWHSvxm8Wx&sa=X&ved=2ahUKEwjwu-KX3eGVAxUrgP0HHfLjOHoQrrQLegQIGxAA&biw=1440&bih=675&dpr=2#lrd=0xda63349f408badb:0x69b1df85fabef4e1,3,,,,",
-        "overall_text": "Note moyenne : 5\/5 — 200+ avis clients vérifiés",
-        "color_background": "#EEF0E8",
-        "color_card": "#FFFFFF",
-        "color_primary": "#3B4F2A",
-        "color_accent": "#C0622A",
-        "color_gold": "#C5A55A",
-        "color_text": "#1E1E1E",
-        "color_muted": "#6B6B5C"
+        "color_background": "#eef0e8",
+        "color_card": "#ffffff",
+        "color_primary": "#3b4f2a",
+        "color_accent": "#c0622a",
+        "color_gold": "#c5a55a",
+        "color_text": "#1e1e1e",
+        "color_muted": "#6b6b5c"
       }
     },
     "newsletter": {
@@ -155,8 +195,8 @@
         "btn_label": "J'en profite !",
         "disclaimer": "Pas de spam. Désinscription en un clic.",
         "success_msg": "Merci ! Votre code -10% arrive dans votre boîte mail.",
-        "color_from": "#C0622A",
-        "color_to": "#8B3E18"
+        "color_from": "#c0622a",
+        "color_to": "#8b3e18"
       }
     }
   },
