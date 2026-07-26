@@ -322,3 +322,183 @@
   color: #FFFFFF;
   border-radius: 8px;
 }
+
+/* ============================================================
+   PREMIUM SEARCH BAR — Brand Design System
+   ============================================================ */
+
+/* === MODAL BACKDROP === */
+.search-modal.modal__content {
+  background: rgba(245, 240, 230, 0.97) !important; /* Translucent Crème */
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border-bottom: 1px solid rgba(59, 79, 42, 0.1) !important;
+  box-shadow: 0 8px 40px rgba(59, 79, 42, 0.12) !important;
+}
+
+/* === MODAL INNER CONTENT AREA === */
+.search-modal__content {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 1.8rem 1.5rem !important;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* === SEARCH FORM WRAPPER === */
+.search-modal__form.search {
+  width: 100%;
+}
+
+/* === FIELD WRAPPER === */
+.search-modal__form .field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* === INPUT === */
+.search__input.field__input {
+  background: #FFFFFF !important;
+  border: 2px solid rgba(59, 79, 42, 0.18) !important;
+  border-radius: 50px !important;
+  height: 56px !important;
+  padding: 0 5.5rem 0 1.8rem !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+  color: #1C2910 !important;
+  box-shadow: 0 4px 20px rgba(59, 79, 42, 0.06) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  outline: none !important;
+  caret-color: #3B4F2A;
+}
+.search__input.field__input::placeholder {
+  color: rgba(59, 79, 42, 0.4) !important;
+  font-style: italic;
+}
+.search__input.field__input:focus {
+  border-color: #3B4F2A !important;
+  box-shadow: 0 0 0 4px rgba(59, 79, 42, 0.1), 0 6px 24px rgba(59, 79, 42, 0.1) !important;
+  background: #FFFFFF !important;
+}
+
+/* === FLOATING LABEL (hide it — placeholder is enough) === */
+.search-modal__form .field__label {
+  display: none !important;
+}
+
+/* === SEARCH SUBMIT BUTTON === */
+.search__button.field__button {
+  position: absolute !important;
+  right: 6px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  background-color: #3B4F2A !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  border-radius: 40px !important;
+  width: 44px !important;
+  height: 44px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer;
+  transition: all 0.25s ease !important;
+  box-shadow: 0 4px 12px rgba(59, 79, 42, 0.3) !important;
+}
+.search__button.field__button:hover {
+  background-color: #1C2910 !important;
+  box-shadow: 0 6px 18px rgba(28, 41, 16, 0.35) !important;
+  transform: translateY(-50%) scale(1.05) !important;
+}
+.search__button.field__button .icon {
+  color: #FFFFFF !important;
+  width: 1.3rem !important;
+  height: 1.3rem !important;
+}
+
+/* === RESET BUTTON (clear × button) === */
+.reset__button.field__button {
+  position: absolute !important;
+  right: 58px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  background: transparent !important;
+  border: none !important;
+  color: rgba(59, 79, 42, 0.5) !important;
+  padding: 0.3rem !important;
+  transition: color 0.2s ease !important;
+}
+.reset__button.field__button:hover {
+  color: #C0622A !important;
+}
+.reset__button.field__button::after {
+  display: none !important; /* Remove the divider line */
+}
+
+/* === CLOSE BUTTON (× top right of modal) === */
+.search-modal__close-button.modal__close-button {
+  background: rgba(59, 79, 42, 0.08) !important;
+  border: 1.5px solid rgba(59, 79, 42, 0.15) !important;
+  border-radius: 50% !important;
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #3B4F2A !important;
+  transition: all 0.25s ease !important;
+  flex-shrink: 0;
+}
+.search-modal__close-button.modal__close-button:hover {
+  background: #C0622A !important;
+  border-color: #C0622A !important;
+  color: #FFFFFF !important;
+  transform: rotate(90deg) !important;
+}
+.search-modal__close-button .svg-wrapper svg {
+  width: 1.1rem !important;
+  height: 1.1rem !important;
+}
+
+/* === PREDICTIVE RESULTS DROPDOWN === */
+.predictive-search {
+  background: #FFFFFF !important;
+  border: 1.5px solid rgba(59, 79, 42, 0.12) !important;
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  box-shadow: 0 16px 48px rgba(59, 79, 42, 0.12) !important;
+  margin-top: 0.5rem !important;
+}
+.predictive-search__item {
+  border-bottom: 1px solid rgba(59, 79, 42, 0.06) !important;
+  padding: 0.8rem 1.5rem !important;
+  transition: background 0.2s ease !important;
+  font-family: 'Inter', sans-serif !important;
+  color: #1C2910 !important;
+}
+.predictive-search__item:hover,
+.predictive-search__item[aria-selected="true"] {
+  background-color: #F5F0E6 !important;
+  color: #3B4F2A !important;
+}
+.predictive-search__item:last-child {
+  border-bottom: none !important;
+}
+/* Product title in results */
+.predictive-search__item .product__title {
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 0.88rem !important;
+  color: #1C2910 !important;
+}
+/* Price in results */
+.predictive-search__item .price {
+  font-family: 'Playfair Display', serif !important;
+  color: #C0622A !important;
+  font-weight: 700 !important;
+}
+
