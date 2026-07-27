@@ -420,6 +420,98 @@
       from { opacity: 0; }
       to   { opacity: 1; }
     }
+
+    /* === BUNDLE DEAL WIDGET === */
+    .nt-bundle-deal {
+      display: none; /* hidden by default, shown by JS */
+      margin-top: 1rem;
+      background: linear-gradient(135deg, #1C2910 0%, #3B4F2A 100%);
+      border: 1.5px solid rgba(197, 165, 90, 0.45);
+      border-radius: 16px;
+      padding: 1rem 1.25rem;
+      position: relative;
+      overflow: hidden;
+      animation: nt-fade-in 0.3s ease forwards;
+    }
+    .nt-bundle-deal::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -80%;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(197,165,90,0.12), transparent);
+      animation: ntShimmer2 3s ease-in-out infinite 1s;
+    }
+    @keyframes ntShimmer2 {
+      0%   { left: -80%; }
+      100% { left: 200%; }
+    }
+    .nt-bundle-deal__header {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 0.6rem;
+    }
+    .nt-bundle-deal__body {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .nt-bundle-deal__breakdown {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.6;
+    }
+    .nt-bundle-deal__breakdown strong {
+      color: #FFFFFF;
+      font-weight: 600;
+    }
+    .nt-bundle-deal__breakdown s {
+      color: rgba(255,255,255,0.3);
+      font-size: 0.72rem;
+    }
+    .nt-bundle-deal__total {
+      text-align: right;
+      flex-shrink: 0;
+    }
+    .nt-bundle-deal__total-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 0.15rem;
+    }
+    .nt-bundle-deal__total-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: #F5C842;
+      line-height: 1;
+      text-shadow: 0 2px 16px rgba(245,200,66,0.35);
+    }
+    .nt-bundle-deal__saving {
+      margin-top: 0.5rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: rgba(111, 207, 151, 0.15);
+      border: 1px solid rgba(111, 207, 151, 0.35);
+      border-radius: 20px;
+      padding: 0.2rem 0.6rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #6FCF97;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
   {%- endstyle -%}
 
   <script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
@@ -525,6 +617,104 @@
                       {{ form | payment_terms }}
                     {%- endform -%}
                   </div>
+
+                  {%- comment -%} BUNDLE DEAL WIDGET — appears when qty >= 2 {%- endcomment -%}
+                  <div class="nt-bundle-deal" id="nt-bundle-deal-{{ section.id }}"
+                       data-unit-price="{{ product.selected_or_first_available_variant.price }}"
+                       data-bundle-qty="2"
+                       data-bundle-price="54900">
+                    <div class="nt-bundle-deal__header">⚡ Offre groupée active</div>
+                    <div class="nt-bundle-deal__body">
+                      <div class="nt-bundle-deal__breakdown" id="nt-bundle-breakdown-{{ section.id }}">
+                        <strong>1ère unité :</strong> 299 DH<br>
+                        <strong>2ème unité :</strong> 250 DH <s>299 DH</s>
+                      </div>
+                      <div class="nt-bundle-deal__total">
+                        <div class="nt-bundle-deal__total-label">Total</div>
+                        <div class="nt-bundle-deal__total-price" id="nt-bundle-total-{{ section.id }}">549 DH</div>
+                        <div class="nt-bundle-deal__saving">✓ Économisez 49 DH</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <script>
+                  (function() {
+                    function initBundleWidget(sectionId) {
+                      var UNIT_PRICE  = 299;   // DH
+                      var BUNDLE_AT   = 2;     // qty à partir de laquelle le deal s'active
+                      var BUNDLE_TOTAL = 549;  // prix total pour BUNDLE_AT unités
+
+                      var deal     = document.getElementById('nt-bundle-deal-' + sectionId);
+                      var breakdown= document.getElementById('nt-bundle-breakdown-' + sectionId);
+                      var totalEl  = document.getElementById('nt-bundle-total-' + sectionId);
+                      if (!deal) return;
+
+                      function getQtyInput() {
+                        // Dawn uses both name="quantity" and data-quantity-input
+                        return document.querySelector(
+                          '[name="quantity"], [data-quantity-input], .quantity__input'
+                        );
+                      }
+
+                      function updateDeal(qty) {
+                        if (qty >= BUNDLE_AT) {
+                          deal.style.display = 'block';
+                          // Compute total: 549 for first 2, then 299 for each extra
+                          var extra = qty - BUNDLE_AT;
+                          var total = BUNDLE_TOTAL + (extra * UNIT_PRICE);
+
+                          // Build breakdown text
+                          var html = '<strong>1\u00e8re unit\u00e9 :</strong> 299 DH<br>';
+                          if (qty === 2) {
+                            html += '<strong>2\u00e8me unit\u00e9 :</strong> 250 DH <s>299 DH</s>';
+                          } else {
+                            html += '<strong>2\u00e8me unit\u00e9 :</strong> 250 DH <s>299 DH</s><br>';
+                            html += '<strong>' + extra + ' unit\u00e9(s) supp. :</strong> ' + (extra * UNIT_PRICE) + ' DH';
+                          }
+                          breakdown.innerHTML = html;
+                          totalEl.textContent = total + ' DH';
+
+                          // Update saving amount
+                          var savingEl = deal.querySelector('.nt-bundle-deal__saving');
+                          if (savingEl) {
+                            var saving = (qty * UNIT_PRICE) - total;
+                            savingEl.textContent = '\u2713 \u00c9conomisez ' + saving + ' DH';
+                          }
+                        } else {
+                          deal.style.display = 'none';
+                        }
+                      }
+
+                      function watchQty() {
+                        var input = getQtyInput();
+                        if (!input) return;
+                        updateDeal(parseInt(input.value) || 1);
+
+                        // Listen for changes (buttons + direct input)
+                        document.addEventListener('click', function(e) {
+                          setTimeout(function() {
+                            var inp = getQtyInput();
+                            if (inp) updateDeal(parseInt(inp.value) || 1);
+                          }, 50);
+                        });
+                        input.addEventListener('change', function() {
+                          updateDeal(parseInt(this.value) || 1);
+                        });
+                        input.addEventListener('input', function() {
+                          updateDeal(parseInt(this.value) || 1);
+                        });
+                      }
+
+                      // Wait for DOM ready
+                      if (document.readyState === 'loading') {
+                        document.addEventListener('DOMContentLoaded', watchQty);
+                      } else {
+                        watchQty();
+                      }
+                    }
+                    initBundleWidget('{{ section.id }}');
+                  })();
+                  </script>
                 {%- when 'inventory' -%}
                   <p
                     class="product__inventory{% if block.settings.text_style == 'uppercase' %} caption-with-letter-spacing{% elsif block.settings.text_style == 'subtitle' %} subtitle{% endif %}{% if product.selected_or_first_available_variant.inventory_management != 'shopify' %} visibility-hidden{% endif %}"
