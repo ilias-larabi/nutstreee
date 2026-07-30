@@ -377,14 +377,164 @@
       letter-spacing: 0.04em;
     }
 
-    /* === DESCRIPTION === */
+    /* === DESCRIPTION — Premium Redesign === */
     .product__description {
       font-family: 'Inter', sans-serif;
-      font-size: 0.92rem;
-      color: #555;
-      line-height: 1.75;
+      font-size: 0.93rem;
+      color: #4A4A3A;
+      line-height: 1.8;
+      border-top: 3px solid #3B4F2A;
+      padding-top: 1.5rem;
+      margin-top: 0.5rem;
     }
-    .product__description p { margin-bottom: 0.75rem; }
+
+    /* Paragraphs */
+    .product__description p {
+      margin-bottom: 1rem;
+      color: #4A4A3A;
+      line-height: 1.8;
+    }
+    /* First paragraph emphasis */
+    .product__description > p:first-of-type {
+      font-size: 0.97rem;
+      color: #2A2A1A;
+      font-weight: 500;
+      border-left: 3px solid #C0622A;
+      padding-left: 0.9rem;
+      margin-bottom: 1.2rem;
+    }
+
+    /* Headings inside description */
+    .product__description h1,
+    .product__description h2,
+    .product__description h3,
+    .product__description h4 {
+      font-family: 'Playfair Display', serif !important;
+      font-weight: 700 !important;
+      color: #1C2910 !important;
+      margin: 1.5rem 0 0.6rem 0;
+      font-size: 1.05rem;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .product__description h2::before,
+    .product__description h3::before {
+      content: '';
+      display: inline-block;
+      width: 20px;
+      height: 3px;
+      background: linear-gradient(90deg, #3B4F2A, #C0622A);
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    /* Unordered list — composition items */
+    .product__description ul {
+      list-style: none !important;
+      padding: 0 !important;
+      margin: 0.5rem 0 1.2rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .product__description ul li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      color: #3A3A2A;
+      padding: 0.45rem 0.75rem;
+      background: #F9F7F2;
+      border-radius: 10px;
+      border: 1px solid rgba(59,79,42,0.08);
+      transition: background 0.2s ease;
+    }
+    .product__description ul li:hover {
+      background: #F0EBE0;
+      border-color: rgba(59,79,42,0.15);
+    }
+    .product__description ul li::before {
+      content: '🌿';
+      flex-shrink: 0;
+      font-size: 0.85rem;
+      margin-top: 1px;
+    }
+
+    /* Ordered list */
+    .product__description ol {
+      padding-left: 1.5rem;
+      margin: 0.5rem 0 1.2rem 0;
+    }
+    .product__description ol li {
+      margin-bottom: 0.4rem;
+      font-size: 0.88rem;
+      color: #3A3A2A;
+      padding-left: 0.3rem;
+    }
+    .product__description ol li::marker {
+      color: #3B4F2A;
+      font-weight: 700;
+    }
+
+    /* Bold text */
+    .product__description strong, .product__description b {
+      color: #1C2910;
+      font-weight: 700;
+    }
+
+    /* Checkmark items (✅ lines in HTML) */
+    .product__description p:has(svg),
+    .product__description .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(59, 79, 42, 0.05);
+      border-radius: 8px;
+      padding: 0.4rem 0.75rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #2A3D1C;
+      margin-bottom: 0.35rem;
+      border-left: 3px solid #3B4F2A;
+    }
+
+    /* HR divider */
+    .product__description hr {
+      border: none;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(59,79,42,0.2), transparent);
+      margin: 1.5rem 0;
+    }
+
+    /* Links */
+    .product__description a {
+      color: #C0622A;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    /* Tables */
+    .product__description table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.85rem;
+    }
+    .product__description td, .product__description th {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid rgba(59,79,42,0.12);
+    }
+    .product__description th {
+      background: #F5F0E6;
+      font-weight: 700;
+      color: #1C2910;
+    }
+    .product__description tr:nth-child(even) td {
+      background: #F9F7F2;
+    }
 
     /* === TRUST BADGES (below buttons) === */
     .product-form__buttons {
